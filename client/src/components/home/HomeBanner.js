@@ -12,13 +12,6 @@ export const HomeBanner = () => {
   return (
     <SectionContainer className="flex items-center justify-center py-16">
       <SectionContainer className="wrap wrap-px z-10 flex flex-col items-center justify-center">
-        {/* Appear First */}
-        <MotionBTTContainer transition={{ delay: 0.2, duration: 0.5 }}>
-          <BadgeGroup alignment="center" className="text-black">
-            <BadgeMessage>Scale Storage </BadgeMessage>
-            <BadgeIcon icon={faDatabase} />
-          </BadgeGroup>
-        </MotionBTTContainer>
         {/* Appear Second */}
         <MotionBTTContainer transition={{ delay: 0.4, duration: 0.5 }}>
           <PageTitle className="mx-auto text-center text-white" type="heavy">
@@ -29,7 +22,7 @@ export const HomeBanner = () => {
         {/* Appear Third */}
         <MotionBTTContainer transition={{ delay: 0.6, duration: 0.5 }}>
           <Content
-            className="text-center mt-3 text-secondary-300 opacity-50"
+            className="mt-3 text-center text-secondary-300 opacity-50"
             alignment="center"
           >
             <p>
@@ -37,16 +30,25 @@ export const HomeBanner = () => {
               with ease.{' '}
             </p>
           </Content>
-          <div className="mb-16 mt-6 text-center">
-            <ButtonGroup className="block">
+          <div className="mb-16 mt-6 flex items-center justify-center text-center">
+            <div className="block">
               <Link
                 to="/stake"
-                className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2  text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
+                className="mr-3 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2  text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
               >
-                Stake Now
+                Have FIL? Stake Now
                 <FontAwesomeIcon icon={faArrowRight} />
               </Link>
-            </ButtonGroup>
+            </div>
+            <div className="block">
+              <Link
+                to="/sp"
+                className="ml-3 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2  text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
+              >
+                Storage Provider? Explore
+                <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </div>
           </div>
         </MotionBTTContainer>
         {/* Appear Fourth */}

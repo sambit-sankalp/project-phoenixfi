@@ -37,7 +37,7 @@ export const Header = ({ isStakePage = false }) => {
             </ButtonGroup>
           )}
 
-          <ButtonGroup className="block">
+          {/* <ButtonGroup className="block">
             <Link
               to="/admin"
               className="ml-4 transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75"
@@ -46,7 +46,7 @@ export const Header = ({ isStakePage = false }) => {
                 Admin
               </div>
             </Link>
-          </ButtonGroup>
+          </ButtonGroup> */}
           {!isStakePage && (
             <ButtonGroup className="block">
               <Link
@@ -69,18 +69,23 @@ export const Header = ({ isStakePage = false }) => {
           </ButtonGroup> */}
           {account.currentAccount == null ? (
             <ButtonGroup className="block">
-              <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto">
+              <div
+                onClick={() => connectWallet()}
+                className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
+              >
                 <FontAwesomeIcon icon={faWallet} />
                 Connect Wallet
               </div>
             </ButtonGroup>
           ) : (
-            <div className="mr-24 flex w-1/3 items-center justify-center text-black">
-              Hey,{' '}
-              {`${String(account.currentAccount).slice(0, 9)}...${String(
-                account.currentAccount
-              ).slice(String(account.currentAccount).length - 9)}`}
-            </div>
+            <ButtonGroup className="block">
+              <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto">
+                <FontAwesomeIcon icon={faWallet} />
+                {`${String(account.currentAccount).slice(0, 9)}...${String(
+                  account.currentAccount
+                ).slice(String(account.currentAccount).length - 9)}`}
+              </div>
+            </ButtonGroup>
           )}
         </SectionContainer>
       </SectionContainer>
