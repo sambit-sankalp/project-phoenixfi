@@ -1,20 +1,41 @@
-import React, { useState } from "react";
-import StakeLayout from "../components/Layout/StakeLayout";
-import { ButtonGroup } from "../components/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faWallet } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import React, { useState } from 'react';
+import StakeLayout from '../components/Layout/StakeLayout';
+import { ButtonGroup } from '../components/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsRotate, faWallet } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 const StakePage = () => {
-  const [state, setState] = useState("Stake");
-  const stakeStates = ["Stake", "Unstake"];
+  const [state, setState] = useState('Stake');
+  const stakeStates = ['Stake', 'Unstake'];
   const [swapState, setSwapState] = useState(false);
+
+  const swap = async () => {
+    // try {
+    const response = await axios({
+      method: 'get',
+      url: `https://backend-inc.onrender.com/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2`,
+      withCredentials: false,
+      params: {
+        access_token: '4WyjmE36P9R1UQDLFrszynHOkM4d15mW',
+      },
+    });
+
+    console.log(response);
+  };
+
+  const handleSwap = () => {
+    setSwapState(true);
+  };
 
   return (
     <StakeLayout>
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
         {swapState && (
-          <div className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div
+            onClick={() => swap()}
+            className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm"
+          >
             {/* <div className="z-20 flex h-[30%] w-[25%] items-center justify-center rounded-lg bg-bgsecondary "> */}
             <CurrencyExchange />
           </div>
@@ -24,7 +45,7 @@ const StakePage = () => {
             <h1
               key={`${stake}-${index}`}
               className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
+                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
               }`}
               onClick={() => setState(stake)}
             >
@@ -59,7 +80,7 @@ const StakePage = () => {
               </div>
             </div>
             <button
-              onClick={() => setSwapState(true)}
+              onClick={handleSwap}
               className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700"
             >
               <FontAwesomeIcon
@@ -92,14 +113,14 @@ const StakePage = () => {
               <div class="relative flex w-full items-end justify-between">
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
                 <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Stake Amount:{" "}
+                  Stake Amount:{' '}
                 </h5>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
                     id="stake"
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
+                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
                   />
                   <img
                     src="./filecoin-logo.svg"
@@ -112,14 +133,14 @@ const StakePage = () => {
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
                 <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Rewards:{" "}
+                  Rewards:{' '}
                 </h5>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
                     id="stake"
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
+                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
                     disabled
                   />
                   <img
@@ -164,9 +185,9 @@ const StakePage = () => {
 };
 
 const CurrencyExchange = () => {
-  const [ornAmount, setOrnAmount] = useState("");
-  const [usdtAmount, setUsdtAmount] = useState("");
-  const [msg, setmsg] = useState("");
+  const [ornAmount, setOrnAmount] = useState('');
+  const [usdtAmount, setUsdtAmount] = useState('');
+  const [msg, setmsg] = useState('');
 
   // Handle the currency conversion logic here
   const handleSRCChange = (e) => {
@@ -187,7 +208,9 @@ const CurrencyExchange = () => {
 
   const swap = async () => {
     // try {
-    const response = await fetch("http://localhost:8080/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2");
+    const response = await fetch(
+      'http://localhost:8080/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2'
+    );
     console.log(response);
   };
   return (
