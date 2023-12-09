@@ -37,9 +37,9 @@ module.exports = {
       provider: () => new HDWalletProvider(`${key}`,`https://api.calibration.node.glif.io/rpc/v1`),
       network_id:  314159,     
       //gas: 20000000,
-      gasPrice:100000000000,        
-      confirmations: 1,    
-      timeoutBlocks: 200, 
+      // gasPrice:100000000000,        
+      // confirmations: 1,    
+      // timeoutBlocks: 200, 
       skipDryRun: true     
 
     }
