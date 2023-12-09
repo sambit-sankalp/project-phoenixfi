@@ -7,7 +7,7 @@ import Web3Context from '../../contexts';
 import { useContext } from 'react';
 
 export const Header = ({ isStakePage = false }) => {
-  const { connectWallet, account,balance } = useContext(Web3Context);
+  const { connectWallet, account, balance } = useContext(Web3Context);
   return (
     <header
       id="header"
@@ -22,33 +22,38 @@ export const Header = ({ isStakePage = false }) => {
           </h1>
         </div>
         <SectionContainer className="ml-auto flex items-center">
-          <ButtonGroup className="block">
-            <div className='transform active:scale-75 transition-transform bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] rounded-lg p-[1.6px]'>
-              <div className="bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#01ACE4] hover:via-[#00C1BD] hover:to-[#00FFFA] hover:text-black md:w-auto">
-                {balance}
-                <img src="./filecoin-logo.svg" alt="fccoin" className="h-7 w-7" />
+          {account.currentAccount !== null && balance !== 0 && (
+            <ButtonGroup className="block">
+              <div className="transform rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] p-[1.6px] transition-transform active:scale-75">
+                <div className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#01ACE4] hover:via-[#00C1BD] hover:to-[#00FFFA] hover:text-black md:w-auto">
+                  {balance}
+                  <img
+                    src="./filecoin-logo.svg"
+                    alt="fccoin"
+                    className="h-7 w-7"
+                  />
+                </div>
               </div>
-            </div>
-          </ButtonGroup>
+            </ButtonGroup>
+          )}
+
           <ButtonGroup className="block">
             <Link
               to="/admin"
-              className="ml-4 transform active:scale-75 transition-transform bg-gradient-to-r from-[#7F00FF] to-[#E100FF] rounded-lg p-[1.6px]"
+              className="ml-4 transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75"
             >
-                <div className='bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto'>
-
-                  Admin
-               </div>
-
+              <div className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto">
+                Admin
+              </div>
             </Link>
           </ButtonGroup>
           {!isStakePage && (
             <ButtonGroup className="block">
               <Link
                 to="/stake"
-                className="ml-4 transform active:scale-75 transition-transform bg-gradient-to-r from-[#7F00FF] to-[#E100FF] rounded-lg p-[1.7px]"
+                className="ml-4 transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.7px] transition-transform active:scale-75"
               >
-                <div className='bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto'>
+                <div className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto">
                   Stake Now
                   <FontAwesomeIcon icon={faArrowRight} />
                 </div>
@@ -62,21 +67,21 @@ export const Header = ({ isStakePage = false }) => {
               Connect Wallet
             </div>
           </ButtonGroup> */}
-           {account.currentAccount == null ? (
-          <div
-            className="mr-24 cursor-pointer text-white bg-secondary-2 w-52 h-10 text-center rounded-xl pt-2 px-4"
-            onClick={connectWallet}
-          >
-            + Connect Wallet
-          </div>
-        ) : (
-          <div className="w-1/3 flex justify-center items-center mr-24 text-black">
-            Hey,{' '}
-            {`${String(account.currentAccount).slice(0, 9)}...${String(
-              account.currentAccount
-            ).slice(String(account.currentAccount).length - 9)}`}
-          </div>
-        )}
+          {account.currentAccount == null ? (
+            <ButtonGroup className="block">
+              <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto">
+                <FontAwesomeIcon icon={faWallet} />
+                Connect Wallet
+              </div>
+            </ButtonGroup>
+          ) : (
+            <div className="mr-24 flex w-1/3 items-center justify-center text-black">
+              Hey,{' '}
+              {`${String(account.currentAccount).slice(0, 9)}...${String(
+                account.currentAccount
+              ).slice(String(account.currentAccount).length - 9)}`}
+            </div>
+          )}
         </SectionContainer>
       </SectionContainer>
     </header>

@@ -46,9 +46,13 @@ const StakePage = () => {
             <h1
               key={`${stake}-${index}`}
               className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
+                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
               }`}
-              onClick={() => setState(stake)}
+              onClick={() => {
+                setState(stake);
+                setstakeFIL(0);
+                setstakepFIL(0);
+              }}
             >
               {stake}
             </h1>
@@ -109,13 +113,24 @@ const StakePage = () => {
             </span>
             <span class="text-sm font-medium text-white opacity-70">100K</span>
           </div> */}
-          <div className={`flex w-full flex-col items-center justify-center`}>
+          <div
+            className={`flex w-full  ${
+              state === 'Stake' ? 'flex-col' : 'flex-col-reverse'
+            } items-center justify-center`}
+          >
             <div className="mt-4 w-full">
               <div class="relative flex w-full items-end justify-between">
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Stake Amount:{" "}
-                </h5>
+                <div className="flex items-center justify-center">
+                  <img
+                    src="./filecoin-logo.svg"
+                    alt="filecoin"
+                    className="h-8 w-8"
+                  />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    FIL:
+                  </h5>
+                </div>
                 <div className="flex items-center justify-center">
                   <input
                     onChange={handleChangeFIL}
@@ -123,21 +138,20 @@ const StakePage = () => {
                     id="stake"
                     value={stakeFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
-                  />
-                  <img
-                    src="./filecoin-logo.svg"
-                    alt="filecoin"
-                    className="h-10 w-10"
+                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
+                    disabled={state === 'Stake' ? false : true}
                   />
                 </div>
               </div>
             </div>
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Rewards:{" "}
-                </h5>
+                <div className="flex items-center justify-center">
+                  <img src="./fccoin.png" alt="filecoin" className="h-8 w-8" />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    pFIL:
+                  </h5>
+                </div>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
@@ -145,13 +159,8 @@ const StakePage = () => {
                     value={stakepFIL}
                     onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
-                    disabled
-                  />
-                  <img
-                    src="./fccoin.png"
-                    alt="filecoin"
-                    className="h-10 w-10"
+                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
+                    disabled={state === 'Stake' ? true : false}
                   />
                 </div>
               </div>

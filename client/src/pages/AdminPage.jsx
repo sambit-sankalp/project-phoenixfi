@@ -36,12 +36,12 @@ const AdminPage = () => {
               required
             />
           </div>
-          <div className="ml-10 flex cursor-pointer items-center justify-start gap-3 whitespace-nowrap rounded-lg bg-secondary-500 !text-[15px] px-8 py-2 font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
+          <div className="ml-10 flex cursor-pointer items-center justify-start gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[15px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
             Submit
           </div>
         </form>
 
-        <div class="relative rounded-lg mt-10 w-10/12 overflow-x-auto">
+        <div class="relative mt-10 w-10/12 overflow-x-auto rounded-lg">
           <table class="w-full rounded-lg text-left text-xl text-gray-500">
             <thead class="rounded-xl bg-bgprimary text-xl uppercase text-white">
               <tr>
@@ -58,10 +58,7 @@ const AdminPage = () => {
             </thead>
             <tbody className="bg-[#43454b] text-white">
               <tr class="">
-                <th
-                  scope="row"
-                  class="whitespace-nowrap px-6 py-4 font-medium"
-                >
+                <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">
                   f01233456
                 </th>
                 <td class="px-6 py-4">650</td>
