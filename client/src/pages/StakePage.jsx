@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import StakeLayout from '../components/Layout/StakeLayout';
 import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../components/Modals/modal';
+import { faArrowsRotate, faWallet } from '@fortawesome/free-solid-svg-icons';
 
 const StakePage = () => {
   const [state, setState] = useState('Stake');
   const stakeStates = ['Stake', 'Unstake'];
-  const [swapState, setSwapState] = useState(true);
+  const [swapState, setSwapState] = useState(false);
 
   return (
     <StakeLayout>
@@ -24,8 +23,8 @@ const StakePage = () => {
           {stakeStates.map((stake, index) => (
             <h1
               key={`${stake}-${index}`}
-              className={` duration-100 transform active:scale-50 transition-transform col-span-1 w-full cursor-pointer text-center text-[20px] text-white ${
-                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
+              className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
+                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
               }`}
               onClick={() => setState(stake)}
             >
@@ -33,8 +32,8 @@ const StakePage = () => {
             </h1>
           ))}
         </div>
-        <div class="flex h-auto w-[500px] flex-col items-center justify-center rounded-lg border-2 border-black bg-bgprimary p-4 pt-2 pr-2">
-          <div className="w-full flex justify-end items-start">
+        <div class="flex h-auto w-[500px] flex-col items-center justify-center rounded-lg border-2 border-black bg-bgprimary p-4 pr-2 pt-2">
+          <div className="flex w-full items-center justify-end">
             <div className="flex w-2/5 items-center justify-around rounded-xl bg-bgsecondary px-1 py-1">
               <FontAwesomeIcon
                 icon={faWallet}
@@ -59,6 +58,13 @@ const StakePage = () => {
                 </div>
               </div>
             </div>
+            <button onClick={() => setSwapState(true)} className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700">
+              <FontAwesomeIcon
+                icon={faArrowsRotate}
+                className="mr-2 transform transition duration-500 ease-in-out hover:rotate-180"
+              />
+              Swap
+            </button>
           </div>
 
           <div className="flex w-full items-center justify-between">
@@ -83,14 +89,14 @@ const StakePage = () => {
               <div class="relative flex w-full items-end justify-between">
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
                 <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Stake Amount:{' '}
+                  Stake Amount:{" "}
                 </h5>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
                     id="stake"
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
+                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
                   />
                   <img
                     src="./filecoin-logo.svg"
@@ -103,14 +109,14 @@ const StakePage = () => {
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
                 <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Rewards:{' '}
+                  Rewards:{" "}
                 </h5>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
                     id="stake"
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
+                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
                     disabled
                   />
                   <img
@@ -123,7 +129,7 @@ const StakePage = () => {
             </div>
           </div>
           <ButtonGroup className="w-full">
-            <p className="inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 mt-3 !text-[14px] py-2 font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
+            <p className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
               {state}
             </p>
           </ButtonGroup>
