@@ -20,33 +20,41 @@ export const Header = ({ isStakePage = false }) => {
         </div>
         <SectionContainer className="ml-auto flex items-center">
           <ButtonGroup className="block">
-            <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg border-2 border-secondary-500 bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-secondary-500 hover:text-black md:w-auto">
-              67.6
-              <img src="./filecoin-logo.svg" alt="fccoin" className="h-7 w-7" />
+            <div className='transform active:scale-75 transition-transform bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] rounded-lg p-[1.6px]'>
+              <div className="bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#01ACE4] hover:via-[#00C1BD] hover:to-[#00FFFA] hover:text-black md:w-auto">
+                67.6
+                <img src="./filecoin-logo.svg" alt="fccoin" className="h-7 w-7" />
+              </div>
             </div>
           </ButtonGroup>
           <ButtonGroup className="block">
             <Link
               to="/admin"
-              className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg border-2 border-secondary-500 bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-secondary-500 hover:text-black md:w-auto"
+              className="ml-4 transform active:scale-75 transition-transform bg-gradient-to-r from-[#7F00FF] to-[#E100FF] rounded-lg p-[1.6px]"
             >
-              Admin
+                <div className='bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto'>
+
+                  Admin
+               </div>
+
             </Link>
           </ButtonGroup>
           {!isStakePage && (
             <ButtonGroup className="block">
               <Link
                 to="/stake"
-                className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg border-2 border-secondary-500 bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-secondary-500 hover:text-black md:w-auto"
+                className="ml-4 transform active:scale-75 transition-transform bg-gradient-to-r from-[#7F00FF] to-[#E100FF] rounded-lg p-[1.7px]"
               >
-                Stake Now
-                <FontAwesomeIcon icon={faArrowRight} />
+                <div className='bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto'>
+                  Stake Now
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </div>
               </Link>
             </ButtonGroup>
           )}
 
           <ButtonGroup className="block">
-            <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 font-semibold text-black transition-colors text-xl duration-300 hover:bg-secondary-500 md:w-auto">
+            <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 font-semibold text-black transition-colors text-xl duration-300 hover:bg-secondary-500 md:w-auto">
               <FontAwesomeIcon icon={faWallet} />
               Connect Wallet
             </div>
