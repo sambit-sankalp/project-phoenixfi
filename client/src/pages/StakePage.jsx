@@ -3,14 +3,23 @@ import StakeLayout from '../components/Layout/StakeLayout';
 import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../components/Modals/modal';
 
 const StakePage = () => {
   const [state, setState] = useState('Stake');
   const stakeStates = ['Stake', 'Unstake'];
+  const [swapState, setSwapState] = useState(true);
 
   return (
     <StakeLayout>
+      
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
+        {swapState && <div className='fixed w-screen h-screen bg-black/50  z-10 flex justify-center items-center backdrop-blur-sm'>
+          <div className='bg-white z-20 w-[25%] h-[30%] flex justify-center items-center '>
+            Modawqedqewqeel <button className='bg-red-800' onClick={() => setSwapState(false)}>X</button>
+          </div>
+
+        </div>}
         <div className="mb-3 grid w-[500px] grid-cols-2 rounded-lg bg-bgprimary p-2">
           {stakeStates.map((stake, index) => (
             <h1
