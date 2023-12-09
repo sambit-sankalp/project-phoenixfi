@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faSignIn } from '@fortawesome/free-solid-svg-icons';
 
 const StorageProvider = () => {
-  const [formID, setformID] = useState(1);
+  const [formID, setformID] = useState(2);
   const formIds = [1, 2];
 
-  const [isRegistered, setisRegistered] = useState(false);
+  const [isRegistered, setisRegistered] = useState(true);
 
   const handleForm = (id) => {
     switch (id) {
@@ -39,6 +39,12 @@ const StorageProvider = () => {
             <div
               onClick={() => setformID(formID + 1)}
               className="inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
+            >
+              Request
+            </div>
+            <div
+              onClick={() => setformID(formID + 1)}
+              className="mt-2 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
             >
               Go Next
               <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
@@ -79,9 +85,37 @@ const StorageProvider = () => {
                 />
               </div>
             </div>
+            <div class="mb-4 flex items-center">
+              <input
+                checked
+                id="checkbox-1"
+                type="checkbox"
+                value=""
+                class="h-4 w-4 rounded bg-[#ff8906] text-black"
+              />
+              <label
+                for="checkbox-1"
+                class="ms-2 text-sm font-medium text-gray-300"
+              >
+                I agree to the{' '}
+                <a
+                  href="#"
+                  class="text-secondary-500 hover:underline"
+                >
+                  terms and conditions
+                </a>
+                .
+              </label>
+            </div>
             <div
               onClick={() => setformID(formID + 1)}
               className="inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
+            >
+              Change
+            </div>
+            <div
+              onClick={() => setformID(formID + 1)}
+              className="mt-2 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
             >
               Go Next
               <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
@@ -137,7 +171,7 @@ const StorageProvider = () => {
                   class={`flex w-full cursor-pointer items-center text-black after:inline-block after:h-1 after:w-full after:border-4 after:border-b after:border-blue-100 after:content-['']`}
                 >
                   <div
-                    class={`flex h-10 w-10 shrink-0 items-center font-extrabold justify-center rounded-full bg-blue-100 ${
+                    class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 font-extrabold ${
                       id === formID
                         ? 'h-[40px] w-[40px] border-4 border-black text-[15px]'
                         : ''
@@ -149,7 +183,7 @@ const StorageProvider = () => {
               ))}
               <li onClick={() => setformID(3)} class="flex w-auto items-center">
                 <div
-                  class={`flex h-10 w-10 shrink-0 cursor-pointer font-extrabold items-center justify-center rounded-full bg-blue-100 ${
+                  class={`flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-extrabold ${
                     3 === formID
                       ? 'h-[40px] w-[40px] border-4 border-black text-[15px]'
                       : ''
