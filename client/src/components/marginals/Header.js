@@ -7,7 +7,7 @@ import Web3Context from '../../contexts';
 import { useContext } from 'react';
 
 export const Header = ({ isStakePage = false }) => {
-  const { connectWallet, account } = useContext(Web3Context);
+  const { connectWallet, account,balance } = useContext(Web3Context);
   return (
     <header
       id="header"
@@ -25,7 +25,7 @@ export const Header = ({ isStakePage = false }) => {
           <ButtonGroup className="block">
             <div className='transform active:scale-75 transition-transform bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] rounded-lg p-[1.6px]'>
               <div className="bg-black inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-md whitespace-nowrap  bg-transparent px-8 text-xl py-2 font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#01ACE4] hover:via-[#00C1BD] hover:to-[#00FFFA] hover:text-black md:w-auto">
-                67.6
+                {balance}
                 <img src="./filecoin-logo.svg" alt="fccoin" className="h-7 w-7" />
               </div>
             </div>

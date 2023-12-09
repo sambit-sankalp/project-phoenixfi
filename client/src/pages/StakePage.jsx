@@ -4,12 +4,24 @@ import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Web3Context from '../contexts';
 import { faArrowsRotate, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { PreviewSwap } from '../contexts/useContract/readContract';
 
 const StakePage = () => {
   const [state, setState] = useState('Stake');
   const stakeStates = ['Stake', 'Unstake'];
+  const [stakeFIL, setstakeFIL] = useState(0);
+  const [stakepFIL, setstakepFIL] = useState(0);
   const [swapState, setSwapState] = useState(false);
-  const {account,balance,pFIL} = useContext(Web3Context)
+  const {account,balance,pFIL,_Pool} = useContext(Web3Context)
+  const handleChangeFIL = async(e) => {
+    setstakeFIL(e.target.value);
+    const res = await PreviewSwap(_Pool,e.target.value)
+    setstakepFIL(res);
+  }
+  
+  const handleChangepFIL = (e) => {
+    setstakeFIL(e.target.value);
+  }
 
   return (
     <StakeLayout>
@@ -17,7 +29,7 @@ const StakePage = () => {
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
         {swapState && <div className='fixed w-screen h-screen bg-black/50  z-10 flex justify-center items-center backdrop-blur-sm'>
           <div className='bg-white z-20 w-[25%] h-[30%] flex justify-center items-center '>
-            Modawqedqewqeel <button className='bg-red-800' onClick={() => setSwapState(false)}>X</button>
+             <button className='bg-red-800' onClick={() => setSwapState(false)}>X</button>
           </div>
 
         </div>}
@@ -95,8 +107,10 @@ const StakePage = () => {
                 </h5>
                 <div className="flex items-center justify-center">
                   <input
+                    onChange={handleChangeFIL}
                     type="number"
                     id="stake"
+                    value = {stakeFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
                     placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
                   />
@@ -116,7 +130,9 @@ const StakePage = () => {
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
-                    id="stake"
+                    id="stakepFIL"
+                    value = {stakepFIL}
+                    onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
                     placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
                     disabled
