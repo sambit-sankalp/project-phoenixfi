@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { SectionContainer } from '../Section/SectionContainer';
-import { getTextAlign } from '../../utils/helper';
+import { SectionContainer } from '../../commons/SectionContainer';
+import { getTextAlign } from '../../../utils/helper';
 
 export const BadgeGroup = ({ alignment, link, children, className }) => {
   const Element = link ? Link : 'div';

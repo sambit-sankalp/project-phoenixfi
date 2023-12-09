@@ -1,4 +1,4 @@
-import { SectionContainer } from '../Section/SectionContainer';
+import { SectionContainer } from '../../commons/SectionContainer';
 
 export const CardGroup = ({ children, className = '' }) => {
   return (

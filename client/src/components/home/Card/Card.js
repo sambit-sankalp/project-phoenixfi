@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { SectionContainer } from '../Section/SectionContainer';
+import { SectionContainer } from '../../commons/SectionContainer';
 import clsx from 'clsx';
 
 const CardType = {
