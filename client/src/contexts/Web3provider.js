@@ -15,6 +15,7 @@ const Web3Provider = ({ children }) => {
   const [balance,setBalace] = useState('');
   const [_StorageContract, setStorageontract] = useState('');
   const [_Pool, setPoolContract] = useState('');
+  const [pFIL,setPFIl] = useState('');
 
   const connectWallet = async () => {
     try {
@@ -61,7 +62,7 @@ const Web3Provider = ({ children }) => {
       console.log('No authorized account found');
     }
   };
-  const getContract = (chain) => {
+  const getContract = async(chain,accounts) => {
     var web3 = new Web3(window.ethereum);
 
         const deployedNetwork = StorageProviderContract.networks[chain];
@@ -77,8 +78,11 @@ const Web3Provider = ({ children }) => {
         Pool.abi,
         deployedNetwork1 && deployedNetwork1.address
       );
-      
+      const res = await instance1.methods.balanceOf(accounts[0]).call();
+      console.log(res)
+      const bal = Number(web3.utils.fromWei(String(res)));
 
+      setPFIl(bal.toFixed(2))
       setStorageontract(instance0);
       setPoolContract(instance1);
 
@@ -92,7 +96,8 @@ const Web3Provider = ({ children }) => {
         account,
         _StorageContract,
         _Pool,
-        balance
+        balance,
+        pFIL
       }}
     >
       {children}
