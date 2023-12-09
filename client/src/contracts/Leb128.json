@@ -1,0 +1,741 @@
+{
+  "contractName": "Leb128",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Zondax AG\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"This library implement the leb128\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"@zondax/filecoin-solidity/contracts/v0.8/utils/Leb128.sol\":\"Leb128\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@ensdomains/buffer/contracts/Buffer.sol\":{\"keccak256\":\"0xd6dd3b0b327288f8e1b711a609f4040fea602e2ad4bba9febdf2f33b4e56eb0c\",\"license\":\"BSD-2-Clause\",\"urls\":[\"bzz-raw://78a722152d40d778a97595e5224fac1d138f4e659dcb1a926148909ef4c4bdca\",\"dweb:/ipfs/QmRxScF53x5ywsChLNpMUCdg2TSoCWTfo8G65Mo3sGY55b\"]},\"@zondax/filecoin-solidity/contracts/v0.8/utils/Leb128.sol\":{\"keccak256\":\"0xe1f4d71cdc933b0c2ac8eb81d711bf63457ed8e79b748ca9f826d40a3b4f143b\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://a2f4fc0bb4d1ff3276c12c88445402e2a018b4ba33b544feb93c5297e317187f\",\"dweb:/ipfs/QmTZLonpTSEQAdZtfmXRt83n6RQMyhFJzppZFCCdXcqwjw\"]}},\"version\":1}",
+  "bytecode": "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212206d72ee4272436a6674fcd00f207b3ab0fceedef90c5d945075303aabc1ce4cbe64736f6c63430008170033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212206d72ee4272436a6674fcd00f207b3ab0fceedef90c5d945075303aabc1ce4cbe64736f6c63430008170033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "1022:603:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "1022:603:19:-:0;;;;;;;;",
+  "source": "/*******************************************************************************\n *   (c) 2023 Zondax AG\n *\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n ********************************************************************************/\n// THIS CODE WAS SECURITY REVIEWED BY KUDELSKI SECURITY, BUT NOT FORMALLY AUDITED\n\n// SPDX-License-Identifier: Apache-2.0\npragma solidity ^0.8.17;\n\nimport \"@ensdomains/buffer/contracts/Buffer.sol\";\n\n/// @notice This library implement the leb128\n/// @author Zondax AG\nlibrary Leb128 {\n    using Buffer for Buffer.buffer;\n\n    /// @notice encode a unsigned integer 64bits into bytes\n    /// @param value the actor ID to encode\n    /// @return result return the value in bytes\n    function encodeUnsignedLeb128FromUInt64(uint64 value) internal pure returns (Buffer.buffer memory result) {\n        while (true) {\n            uint64 byte_ = value & 0x7f;\n            value >>= 7;\n            if (value == 0) {\n                result.appendUint8(uint8(byte_));\n                return result;\n            }\n            result.appendUint8(uint8(byte_ | 0x80));\n        }\n    }\n}\n",
+  "sourcePath": "@zondax\\filecoin-solidity\\contracts\\v0.8\\utils\\Leb128.sol",
+  "ast": {
+    "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/utils/Leb128.sol",
+    "exportedSymbols": {
+      "Buffer": [
+        421
+      ],
+      "Leb128": [
+        6890
+      ]
+    },
+    "id": 6891,
+    "license": "Apache-2.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6833,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "877:24:19"
+      },
+      {
+        "absolutePath": "@ensdomains/buffer/contracts/Buffer.sol",
+        "file": "@ensdomains/buffer/contracts/Buffer.sol",
+        "id": 6834,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 6891,
+        "sourceUnit": 422,
+        "src": "903:49:19",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "Leb128",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": {
+          "id": 6835,
+          "nodeType": "StructuredDocumentation",
+          "src": "954:68:19",
+          "text": "@notice This library implement the leb128\n @author Zondax AG"
+        },
+        "fullyImplemented": true,
+        "id": 6890,
+        "linearizedBaseContracts": [
+          6890
+        ],
+        "name": "Leb128",
+        "nameLocation": "1030:6:19",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "global": false,
+            "id": 6839,
+            "libraryName": {
+              "id": 6836,
+              "name": "Buffer",
+              "nameLocations": [
+                "1049:6:19"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 421,
+              "src": "1049:6:19"
+            },
+            "nodeType": "UsingForDirective",
+            "src": "1043:31:19",
+            "typeName": {
+              "id": 6838,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 6837,
+                "name": "Buffer.buffer",
+                "nameLocations": [
+                  "1060:6:19",
+                  "1067:6:19"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 8,
+                "src": "1060:13:19"
+              },
+              "referencedDeclaration": 8,
+              "src": "1060:13:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_buffer_$8_storage_ptr",
+                "typeString": "struct Buffer.buffer"
+              }
+            }
+          },
+          {
+            "body": {
+              "id": 6888,
+              "nodeType": "Block",
+              "src": "1339:284:19",
+              "statements": [
+                {
+                  "body": {
+                    "id": 6886,
+                    "nodeType": "Block",
+                    "src": "1362:255:19",
+                    "statements": [
+                      {
+                        "assignments": [
+                          6850
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 6850,
+                            "mutability": "mutable",
+                            "name": "byte_",
+                            "nameLocation": "1383:5:19",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 6886,
+                            "src": "1376:12:19",
+                            "stateVariable": false,
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint64",
+                              "typeString": "uint64"
+                            },
+                            "typeName": {
+                              "id": 6849,
+                              "name": "uint64",
+                              "nodeType": "ElementaryTypeName",
+                              "src": "1376:6:19",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint64",
+                                "typeString": "uint64"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 6854,
+                        "initialValue": {
+                          "commonType": {
+                            "typeIdentifier": "t_uint64",
+                            "typeString": "uint64"
+                          },
+                          "id": 6853,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "id": 6851,
+                            "name": "value",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6842,
+                            "src": "1391:5:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint64",
+                              "typeString": "uint64"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "&",
+                          "rightExpression": {
+                            "hexValue": "30783766",
+                            "id": 6852,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1399:4:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_127_by_1",
+                              "typeString": "int_const 127"
+                            },
+                            "value": "0x7f"
+                          },
+                          "src": "1391:12:19",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint64",
+                            "typeString": "uint64"
+                          }
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "1376:27:19"
+                      },
+                      {
+                        "expression": {
+                          "id": 6857,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "id": 6855,
+                            "name": "value",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6842,
+                            "src": "1417:5:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint64",
+                              "typeString": "uint64"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": ">>=",
+                          "rightHandSide": {
+                            "hexValue": "37",
+                            "id": 6856,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1427:1:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_7_by_1",
+                              "typeString": "int_const 7"
+                            },
+                            "value": "7"
+                          },
+                          "src": "1417:11:19",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint64",
+                            "typeString": "uint64"
+                          }
+                        },
+                        "id": 6858,
+                        "nodeType": "ExpressionStatement",
+                        "src": "1417:11:19"
+                      },
+                      {
+                        "condition": {
+                          "commonType": {
+                            "typeIdentifier": "t_uint64",
+                            "typeString": "uint64"
+                          },
+                          "id": 6861,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "id": 6859,
+                            "name": "value",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6842,
+                            "src": "1446:5:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint64",
+                              "typeString": "uint64"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "==",
+                          "rightExpression": {
+                            "hexValue": "30",
+                            "id": 6860,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1455:1:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "src": "1446:10:19",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "id": 6874,
+                        "nodeType": "IfStatement",
+                        "src": "1442:112:19",
+                        "trueBody": {
+                          "id": 6873,
+                          "nodeType": "Block",
+                          "src": "1458:96:19",
+                          "statements": [
+                            {
+                              "expression": {
+                                "arguments": [
+                                  {
+                                    "arguments": [
+                                      {
+                                        "id": 6867,
+                                        "name": "byte_",
+                                        "nodeType": "Identifier",
+                                        "overloadedDeclarations": [],
+                                        "referencedDeclaration": 6850,
+                                        "src": "1501:5:19",
+                                        "typeDescriptions": {
+                                          "typeIdentifier": "t_uint64",
+                                          "typeString": "uint64"
+                                        }
+                                      }
+                                    ],
+                                    "expression": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_uint64",
+                                          "typeString": "uint64"
+                                        }
+                                      ],
+                                      "id": 6866,
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "nodeType": "ElementaryTypeNameExpression",
+                                      "src": "1495:5:19",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_type$_t_uint8_$",
+                                        "typeString": "type(uint8)"
+                                      },
+                                      "typeName": {
+                                        "id": 6865,
+                                        "name": "uint8",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "1495:5:19",
+                                        "typeDescriptions": {}
+                                      }
+                                    },
+                                    "id": 6868,
+                                    "isConstant": false,
+                                    "isLValue": false,
+                                    "isPure": false,
+                                    "kind": "typeConversion",
+                                    "lValueRequested": false,
+                                    "nameLocations": [],
+                                    "names": [],
+                                    "nodeType": "FunctionCall",
+                                    "src": "1495:12:19",
+                                    "tryCall": false,
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_uint8",
+                                      "typeString": "uint8"
+                                    }
+                                  }
+                                ],
+                                "expression": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_uint8",
+                                      "typeString": "uint8"
+                                    }
+                                  ],
+                                  "expression": {
+                                    "id": 6862,
+                                    "name": "result",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 6846,
+                                    "src": "1476:6:19",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                                      "typeString": "struct Buffer.buffer memory"
+                                    }
+                                  },
+                                  "id": 6864,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "memberLocation": "1483:11:19",
+                                  "memberName": "appendUint8",
+                                  "nodeType": "MemberAccess",
+                                  "referencedDeclaration": 262,
+                                  "src": "1476:18:19",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_function_internal_pure$_t_struct$_buffer_$8_memory_ptr_$_t_uint8_$returns$_t_struct$_buffer_$8_memory_ptr_$attached_to$_t_struct$_buffer_$8_memory_ptr_$",
+                                    "typeString": "function (struct Buffer.buffer memory,uint8) pure returns (struct Buffer.buffer memory)"
+                                  }
+                                },
+                                "id": 6869,
+                                "isConstant": false,
+                                "isLValue": false,
+                                "isPure": false,
+                                "kind": "functionCall",
+                                "lValueRequested": false,
+                                "nameLocations": [],
+                                "names": [],
+                                "nodeType": "FunctionCall",
+                                "src": "1476:32:19",
+                                "tryCall": false,
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                                  "typeString": "struct Buffer.buffer memory"
+                                }
+                              },
+                              "id": 6870,
+                              "nodeType": "ExpressionStatement",
+                              "src": "1476:32:19"
+                            },
+                            {
+                              "expression": {
+                                "id": 6871,
+                                "name": "result",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 6846,
+                                "src": "1533:6:19",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                                  "typeString": "struct Buffer.buffer memory"
+                                }
+                              },
+                              "functionReturnParameters": 6847,
+                              "id": 6872,
+                              "nodeType": "Return",
+                              "src": "1526:13:19"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "expression": {
+                          "arguments": [
+                            {
+                              "arguments": [
+                                {
+                                  "commonType": {
+                                    "typeIdentifier": "t_uint64",
+                                    "typeString": "uint64"
+                                  },
+                                  "id": 6882,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "leftExpression": {
+                                    "id": 6880,
+                                    "name": "byte_",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 6850,
+                                    "src": "1592:5:19",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_uint64",
+                                      "typeString": "uint64"
+                                    }
+                                  },
+                                  "nodeType": "BinaryOperation",
+                                  "operator": "|",
+                                  "rightExpression": {
+                                    "hexValue": "30783830",
+                                    "id": 6881,
+                                    "isConstant": false,
+                                    "isLValue": false,
+                                    "isPure": true,
+                                    "kind": "number",
+                                    "lValueRequested": false,
+                                    "nodeType": "Literal",
+                                    "src": "1600:4:19",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_rational_128_by_1",
+                                      "typeString": "int_const 128"
+                                    },
+                                    "value": "0x80"
+                                  },
+                                  "src": "1592:12:19",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint64",
+                                    "typeString": "uint64"
+                                  }
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": [
+                                  {
+                                    "typeIdentifier": "t_uint64",
+                                    "typeString": "uint64"
+                                  }
+                                ],
+                                "id": 6879,
+                                "isConstant": false,
+                                "isLValue": false,
+                                "isPure": true,
+                                "lValueRequested": false,
+                                "nodeType": "ElementaryTypeNameExpression",
+                                "src": "1586:5:19",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_type$_t_uint8_$",
+                                  "typeString": "type(uint8)"
+                                },
+                                "typeName": {
+                                  "id": 6878,
+                                  "name": "uint8",
+                                  "nodeType": "ElementaryTypeName",
+                                  "src": "1586:5:19",
+                                  "typeDescriptions": {}
+                                }
+                              },
+                              "id": 6883,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "kind": "typeConversion",
+                              "lValueRequested": false,
+                              "nameLocations": [],
+                              "names": [],
+                              "nodeType": "FunctionCall",
+                              "src": "1586:19:19",
+                              "tryCall": false,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            ],
+                            "expression": {
+                              "id": 6875,
+                              "name": "result",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 6846,
+                              "src": "1567:6:19",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                                "typeString": "struct Buffer.buffer memory"
+                              }
+                            },
+                            "id": 6877,
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberLocation": "1574:11:19",
+                            "memberName": "appendUint8",
+                            "nodeType": "MemberAccess",
+                            "referencedDeclaration": 262,
+                            "src": "1567:18:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_internal_pure$_t_struct$_buffer_$8_memory_ptr_$_t_uint8_$returns$_t_struct$_buffer_$8_memory_ptr_$attached_to$_t_struct$_buffer_$8_memory_ptr_$",
+                              "typeString": "function (struct Buffer.buffer memory,uint8) pure returns (struct Buffer.buffer memory)"
+                            }
+                          },
+                          "id": 6884,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "nameLocations": [],
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1567:39:19",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                            "typeString": "struct Buffer.buffer memory"
+                          }
+                        },
+                        "id": 6885,
+                        "nodeType": "ExpressionStatement",
+                        "src": "1567:39:19"
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "hexValue": "74727565",
+                    "id": 6848,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "1356:4:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "id": 6887,
+                  "nodeType": "WhileStatement",
+                  "src": "1349:268:19"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 6840,
+              "nodeType": "StructuredDocumentation",
+              "src": "1080:148:19",
+              "text": "@notice encode a unsigned integer 64bits into bytes\n @param value the actor ID to encode\n @return result return the value in bytes"
+            },
+            "id": 6889,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "encodeUnsignedLeb128FromUInt64",
+            "nameLocation": "1242:30:19",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6843,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6842,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "1280:5:19",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6889,
+                  "src": "1273:12:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint64",
+                    "typeString": "uint64"
+                  },
+                  "typeName": {
+                    "id": 6841,
+                    "name": "uint64",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1273:6:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint64",
+                      "typeString": "uint64"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1272:14:19"
+            },
+            "returnParameters": {
+              "id": 6847,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6846,
+                  "mutability": "mutable",
+                  "name": "result",
+                  "nameLocation": "1331:6:19",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6889,
+                  "src": "1310:27:19",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_buffer_$8_memory_ptr",
+                    "typeString": "struct Buffer.buffer"
+                  },
+                  "typeName": {
+                    "id": 6845,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 6844,
+                      "name": "Buffer.buffer",
+                      "nameLocations": [
+                        "1310:6:19",
+                        "1317:6:19"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 8,
+                      "src": "1310:13:19"
+                    },
+                    "referencedDeclaration": 8,
+                    "src": "1310:13:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_buffer_$8_storage_ptr",
+                      "typeString": "struct Buffer.buffer"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1309:29:19"
+            },
+            "scope": 6890,
+            "src": "1233:390:19",
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 6891,
+        "src": "1022:603:19",
+        "usedErrors": [],
+        "usedEvents": []
+      }
+    ],
+    "src": "877:749:19"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.23+commit.f704f362.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2023-12-09T09:39:34.878Z",
+  "devdoc": {
+    "author": "Zondax AG",
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "This library implement the leb128",
+    "version": 1
+  }
+}

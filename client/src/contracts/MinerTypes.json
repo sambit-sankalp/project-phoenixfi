@@ -1,0 +1,1968 @@
+{
+  "contractName": "MinerTypes",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Zondax AG\",\"kind\":\"dev\",\"methods\":{},\"title\":\"Filecoin miner actor types for Solidity.\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@zondax/filecoin-solidity/contracts/v0.8/types/MinerTypes.sol\":\"MinerTypes\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@zondax/filecoin-solidity/contracts/v0.8/cbor/BigIntCbor.sol\":{\"keccak256\":\"0xbe9eb7f33f943e12a2ca6d8a02178c30cef91f8c9db1c1b50f88a77e31784ac4\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://d4b8aa06f6f6a241531393d43e4439dcf264542312f03b3b1be00a6448d45d5e\",\"dweb:/ipfs/QmVarAEVBJgLnGqMEZ6XDRokXKR8vWpS3R6fz7QNCMVPT2\"]},\"@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol\":{\"keccak256\":\"0x1819b8e82cf53f0fadc446d064a380979888b97a0004f1e70c9fa1a6f4f13ed9\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://f7346f62e3317f519791256e9ecd70c44b3ed48404d8a15aa28b3490b11adabb\",\"dweb:/ipfs/QmNQLSdzyHLDN9a76XANJzkGVVdyYwYzZSRRiwv6CqwZRr\"]},\"@zondax/filecoin-solidity/contracts/v0.8/types/MinerTypes.sol\":{\"keccak256\":\"0x6d7839a173dc3b84142cb3ea3a834148e57a89ad3d15383c26b6036461145e72\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://9e42b9189be593b1511e3a172d70061ff1ed8bd95403385dcac546608146f2ae\",\"dweb:/ipfs/QmVhSwCqTFDUMK35YiRuhWDKLQaaFfU2Wv1gs2DbVqw6EW\"]}},\"version\":1}",
+  "bytecode": "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212203ae25e2688035b51e869f80fbea26fc6f7921ed79b49972dbd0ebad95e5aedb264736f6c63430008170033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212203ae25e2688035b51e869f80fbea26fc6f7921ed79b49972dbd0ebad95e5aedb264736f6c63430008170033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "1042:3848:14:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "1042:3848:14:-:0;;;;;;;;",
+  "source": "/*******************************************************************************\n *   (c) 2022 Zondax AG\n *\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n ********************************************************************************/\n//\n// THIS CODE WAS SECURITY REVIEWED BY KUDELSKI SECURITY, BUT NOT FORMALLY AUDITED\n\n// SPDX-License-Identifier: Apache-2.0\npragma solidity ^0.8.17;\n\nimport \"../cbor/BigIntCbor.sol\";\nimport \"./CommonTypes.sol\";\n\n/// @title Filecoin miner actor types for Solidity.\n/// @author Zondax AG\nlibrary MinerTypes {\n    uint constant GetOwnerMethodNum = 3275365574;\n    uint constant ChangeOwnerAddressMethodNum = 1010589339;\n    uint constant IsControllingAddressMethodNum = 348244887;\n    uint constant GetSectorSizeMethodNum = 3858292296;\n    uint constant GetAvailableBalanceMethodNum = 4026106874;\n    uint constant GetVestingFundsMethodNum = 1726876304;\n    uint constant ChangeBeneficiaryMethodNum = 1570634796;\n    uint constant GetBeneficiaryMethodNum = 4158972569;\n    uint constant ChangeWorkerAddressMethodNum = 3302309124;\n    uint constant ChangePeerIDMethodNum = 1236548004;\n    uint constant ChangeMultiaddrsMethodNum = 1063480576;\n    uint constant RepayDebtMethodNum = 3665352697;\n    uint constant ConfirmChangeWorkerAddressMethodNum = 2354970453;\n    uint constant GetPeerIDMethodNum = 2812875329;\n    uint constant GetMultiaddrsMethodNum = 1332909407;\n    uint constant WithdrawBalanceMethodNum = 2280458852;\n\n    /// @param owner owner address.\n    /// @param proposed owner address.\n    struct GetOwnerReturn {\n        CommonTypes.FilAddress owner;\n        CommonTypes.FilAddress proposed;\n    }\n\n    /// @param vesting_funds funds\n    struct GetVestingFundsReturn {\n        VestingFunds[] vesting_funds;\n    }\n\n    /// @param new_beneficiary the new beneficiary address.\n    /// @param new_quota the new quota token amount.\n    /// @param new_expiration the epoch that the new quota will be expired.\n    struct ChangeBeneficiaryParams {\n        CommonTypes.FilAddress new_beneficiary;\n        CommonTypes.BigInt new_quota;\n        CommonTypes.ChainEpoch new_expiration;\n    }\n\n    /// @param active current active beneficiary.\n    /// @param proposed the proposed and pending beneficiary.\n    struct GetBeneficiaryReturn {\n        ActiveBeneficiary active;\n        PendingBeneficiaryChange proposed;\n    }\n\n    /// @param new_worker the new worker address.\n    /// @param new_control_addresses the new controller addresses.\n    struct ChangeWorkerAddressParams {\n        CommonTypes.FilAddress new_worker;\n        CommonTypes.FilAddress[] new_control_addresses;\n    }\n\n    /// @param new_multi_addrs the new multi-signature address.\n    struct ChangeMultiaddrsParams {\n        CommonTypes.FilAddress[] new_multi_addrs;\n    }\n\n    /// @param multi_addrs the multi-signature address.\n    struct GetMultiaddrsReturn {\n        CommonTypes.FilAddress[] multi_addrs;\n    }\n\n    /// @param epoch the epoch of funds vested.\n    /// @param amount the amount of funds vested.\n    struct VestingFunds {\n        CommonTypes.ChainEpoch epoch;\n        CommonTypes.BigInt amount;\n    }\n\n    /// @param quota the quota token amount.\n    /// @param used_quota the used quota token amount.\n    /// @param expiration the epoch that the quota will be expired.\n    struct BeneficiaryTerm {\n        CommonTypes.BigInt quota;\n        CommonTypes.BigInt used_quota;\n        CommonTypes.ChainEpoch expiration;\n    }\n\n    /// @param beneficiary the address of the beneficiary.\n    /// @param term BeneficiaryTerm\n    struct ActiveBeneficiary {\n        CommonTypes.FilAddress beneficiary;\n        BeneficiaryTerm term;\n    }\n\n    /// @param new_beneficiary the new beneficiary address.\n    /// @param new_quota the new quota token amount.\n    /// @param new_expiration the epoch that the new quota will be expired.\n    /// @param approved_by_beneficiary if this proposal is approved by beneficiary or not.\n    /// @param approved_by_nominee if this proposal is approved by nominee or not.\n    struct PendingBeneficiaryChange {\n        CommonTypes.FilAddress new_beneficiary;\n        CommonTypes.BigInt new_quota;\n        CommonTypes.ChainEpoch new_expiration;\n        bool approved_by_beneficiary;\n        bool approved_by_nominee;\n    }\n\n    enum SectorSize {\n        _2KiB,\n        _8MiB,\n        _512MiB,\n        _32GiB,\n        _64GiB\n    }\n}\n",
+  "sourcePath": "@zondax\\filecoin-solidity\\contracts\\v0.8\\types\\MinerTypes.sol",
+  "ast": {
+    "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/types/MinerTypes.sol",
+    "exportedSymbols": {
+      "BigIntCBOR": [
+        2442
+      ],
+      "CommonTypes": [
+        4560
+      ],
+      "MinerTypes": [
+        4716
+      ]
+    },
+    "id": 4717,
+    "license": "Apache-2.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4562,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "880:24:14"
+      },
+      {
+        "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/cbor/BigIntCbor.sol",
+        "file": "../cbor/BigIntCbor.sol",
+        "id": 4563,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 4717,
+        "sourceUnit": 2443,
+        "src": "906:32:14",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol",
+        "file": "./CommonTypes.sol",
+        "id": 4564,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 4717,
+        "sourceUnit": 4561,
+        "src": "939:27:14",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "MinerTypes",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": {
+          "id": 4565,
+          "nodeType": "StructuredDocumentation",
+          "src": "968:74:14",
+          "text": "@title Filecoin miner actor types for Solidity.\n @author Zondax AG"
+        },
+        "fullyImplemented": true,
+        "id": 4716,
+        "linearizedBaseContracts": [
+          4716
+        ],
+        "name": "MinerTypes",
+        "nameLocation": "1050:10:14",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 4568,
+            "mutability": "constant",
+            "name": "GetOwnerMethodNum",
+            "nameLocation": "1081:17:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1067:44:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4566,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1067:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "33323735333635353734",
+              "id": 4567,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1101:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3275365574_by_1",
+                "typeString": "int_const 3275365574"
+              },
+              "value": "3275365574"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4571,
+            "mutability": "constant",
+            "name": "ChangeOwnerAddressMethodNum",
+            "nameLocation": "1131:27:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1117:54:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4569,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1117:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31303130353839333339",
+              "id": 4570,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1161:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1010589339_by_1",
+                "typeString": "int_const 1010589339"
+              },
+              "value": "1010589339"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4574,
+            "mutability": "constant",
+            "name": "IsControllingAddressMethodNum",
+            "nameLocation": "1191:29:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1177:55:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4572,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1177:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "333438323434383837",
+              "id": 4573,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1223:9:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_348244887_by_1",
+                "typeString": "int_const 348244887"
+              },
+              "value": "348244887"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4577,
+            "mutability": "constant",
+            "name": "GetSectorSizeMethodNum",
+            "nameLocation": "1252:22:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1238:49:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4575,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1238:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "33383538323932323936",
+              "id": 4576,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1277:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3858292296_by_1",
+                "typeString": "int_const 3858292296"
+              },
+              "value": "3858292296"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4580,
+            "mutability": "constant",
+            "name": "GetAvailableBalanceMethodNum",
+            "nameLocation": "1307:28:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1293:55:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4578,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1293:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "34303236313036383734",
+              "id": 4579,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1338:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_4026106874_by_1",
+                "typeString": "int_const 4026106874"
+              },
+              "value": "4026106874"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4583,
+            "mutability": "constant",
+            "name": "GetVestingFundsMethodNum",
+            "nameLocation": "1368:24:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1354:51:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4581,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1354:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31373236383736333034",
+              "id": 4582,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1395:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1726876304_by_1",
+                "typeString": "int_const 1726876304"
+              },
+              "value": "1726876304"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4586,
+            "mutability": "constant",
+            "name": "ChangeBeneficiaryMethodNum",
+            "nameLocation": "1425:26:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1411:53:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4584,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1411:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31353730363334373936",
+              "id": 4585,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1454:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1570634796_by_1",
+                "typeString": "int_const 1570634796"
+              },
+              "value": "1570634796"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4589,
+            "mutability": "constant",
+            "name": "GetBeneficiaryMethodNum",
+            "nameLocation": "1484:23:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1470:50:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4587,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1470:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "34313538393732353639",
+              "id": 4588,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1510:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_4158972569_by_1",
+                "typeString": "int_const 4158972569"
+              },
+              "value": "4158972569"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4592,
+            "mutability": "constant",
+            "name": "ChangeWorkerAddressMethodNum",
+            "nameLocation": "1540:28:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1526:55:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4590,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1526:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "33333032333039313234",
+              "id": 4591,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1571:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3302309124_by_1",
+                "typeString": "int_const 3302309124"
+              },
+              "value": "3302309124"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4595,
+            "mutability": "constant",
+            "name": "ChangePeerIDMethodNum",
+            "nameLocation": "1601:21:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1587:48:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4593,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1587:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31323336353438303034",
+              "id": 4594,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1625:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1236548004_by_1",
+                "typeString": "int_const 1236548004"
+              },
+              "value": "1236548004"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4598,
+            "mutability": "constant",
+            "name": "ChangeMultiaddrsMethodNum",
+            "nameLocation": "1655:25:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1641:52:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4596,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1641:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31303633343830353736",
+              "id": 4597,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1683:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1063480576_by_1",
+                "typeString": "int_const 1063480576"
+              },
+              "value": "1063480576"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4601,
+            "mutability": "constant",
+            "name": "RepayDebtMethodNum",
+            "nameLocation": "1713:18:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1699:45:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4599,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1699:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "33363635333532363937",
+              "id": 4600,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1734:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3665352697_by_1",
+                "typeString": "int_const 3665352697"
+              },
+              "value": "3665352697"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4604,
+            "mutability": "constant",
+            "name": "ConfirmChangeWorkerAddressMethodNum",
+            "nameLocation": "1764:35:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1750:62:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4602,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1750:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "32333534393730343533",
+              "id": 4603,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1802:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2354970453_by_1",
+                "typeString": "int_const 2354970453"
+              },
+              "value": "2354970453"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4607,
+            "mutability": "constant",
+            "name": "GetPeerIDMethodNum",
+            "nameLocation": "1832:18:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1818:45:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4605,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1818:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "32383132383735333239",
+              "id": 4606,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1853:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2812875329_by_1",
+                "typeString": "int_const 2812875329"
+              },
+              "value": "2812875329"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4610,
+            "mutability": "constant",
+            "name": "GetMultiaddrsMethodNum",
+            "nameLocation": "1883:22:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1869:49:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4608,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1869:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "31333332393039343037",
+              "id": 4609,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1908:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1332909407_by_1",
+                "typeString": "int_const 1332909407"
+              },
+              "value": "1332909407"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 4613,
+            "mutability": "constant",
+            "name": "WithdrawBalanceMethodNum",
+            "nameLocation": "1938:24:14",
+            "nodeType": "VariableDeclaration",
+            "scope": 4716,
+            "src": "1924:51:14",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4611,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1924:4:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "32323830343538383532",
+              "id": 4612,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1965:10:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2280458852_by_1",
+                "typeString": "int_const 2280458852"
+              },
+              "value": "2280458852"
+            },
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "MinerTypes.GetOwnerReturn",
+            "documentation": {
+              "id": 4614,
+              "nodeType": "StructuredDocumentation",
+              "src": "1982:70:14",
+              "text": "@param owner owner address.\n @param proposed owner address."
+            },
+            "id": 4621,
+            "members": [
+              {
+                "constant": false,
+                "id": 4617,
+                "mutability": "mutable",
+                "name": "owner",
+                "nameLocation": "2112:5:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4621,
+                "src": "2089:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4616,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4615,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "2089:11:14",
+                      "2101:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "2089:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "2089:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4620,
+                "mutability": "mutable",
+                "name": "proposed",
+                "nameLocation": "2150:8:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4621,
+                "src": "2127:31:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4619,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4618,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "2127:11:14",
+                      "2139:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "2127:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "2127:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "GetOwnerReturn",
+            "nameLocation": "2064:14:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "2057:108:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.GetVestingFundsReturn",
+            "documentation": {
+              "id": 4622,
+              "nodeType": "StructuredDocumentation",
+              "src": "2171:30:14",
+              "text": "@param vesting_funds funds"
+            },
+            "id": 4627,
+            "members": [
+              {
+                "constant": false,
+                "id": 4626,
+                "mutability": "mutable",
+                "name": "vesting_funds",
+                "nameLocation": "2260:13:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4627,
+                "src": "2245:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_VestingFunds_$4675_storage_$dyn_storage_ptr",
+                  "typeString": "struct MinerTypes.VestingFunds[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4624,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 4623,
+                      "name": "VestingFunds",
+                      "nameLocations": [
+                        "2245:12:14"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4675,
+                      "src": "2245:12:14"
+                    },
+                    "referencedDeclaration": 4675,
+                    "src": "2245:12:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_VestingFunds_$4675_storage_ptr",
+                      "typeString": "struct MinerTypes.VestingFunds"
+                    }
+                  },
+                  "id": 4625,
+                  "nodeType": "ArrayTypeName",
+                  "src": "2245:14:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_VestingFunds_$4675_storage_$dyn_storage_ptr",
+                    "typeString": "struct MinerTypes.VestingFunds[]"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "GetVestingFundsReturn",
+            "nameLocation": "2213:21:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "2206:74:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.ChangeBeneficiaryParams",
+            "documentation": {
+              "id": 4628,
+              "nodeType": "StructuredDocumentation",
+              "src": "2286:184:14",
+              "text": "@param new_beneficiary the new beneficiary address.\n @param new_quota the new quota token amount.\n @param new_expiration the epoch that the new quota will be expired."
+            },
+            "id": 4638,
+            "members": [
+              {
+                "constant": false,
+                "id": 4631,
+                "mutability": "mutable",
+                "name": "new_beneficiary",
+                "nameLocation": "2539:15:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4638,
+                "src": "2516:38:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4630,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4629,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "2516:11:14",
+                      "2528:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "2516:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "2516:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4634,
+                "mutability": "mutable",
+                "name": "new_quota",
+                "nameLocation": "2583:9:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4638,
+                "src": "2564:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                  "typeString": "struct CommonTypes.BigInt"
+                },
+                "typeName": {
+                  "id": 4633,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4632,
+                    "name": "CommonTypes.BigInt",
+                    "nameLocations": [
+                      "2564:11:14",
+                      "2576:6:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4541,
+                    "src": "2564:18:14"
+                  },
+                  "referencedDeclaration": 4541,
+                  "src": "2564:18:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4637,
+                "mutability": "mutable",
+                "name": "new_expiration",
+                "nameLocation": "2625:14:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4638,
+                "src": "2602:37:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                  "typeString": "CommonTypes.ChainEpoch"
+                },
+                "typeName": {
+                  "id": 4636,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4635,
+                    "name": "CommonTypes.ChainEpoch",
+                    "nameLocations": [
+                      "2602:11:14",
+                      "2614:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4559,
+                    "src": "2602:22:14"
+                  },
+                  "referencedDeclaration": 4559,
+                  "src": "2602:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                    "typeString": "CommonTypes.ChainEpoch"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "ChangeBeneficiaryParams",
+            "nameLocation": "2482:23:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "2475:171:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.GetBeneficiaryReturn",
+            "documentation": {
+              "id": 4639,
+              "nodeType": "StructuredDocumentation",
+              "src": "2652:107:14",
+              "text": "@param active current active beneficiary.\n @param proposed the proposed and pending beneficiary."
+            },
+            "id": 4646,
+            "members": [
+              {
+                "constant": false,
+                "id": 4642,
+                "mutability": "mutable",
+                "name": "active",
+                "nameLocation": "2820:6:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4646,
+                "src": "2802:24:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_ActiveBeneficiary_$4694_storage_ptr",
+                  "typeString": "struct MinerTypes.ActiveBeneficiary"
+                },
+                "typeName": {
+                  "id": 4641,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4640,
+                    "name": "ActiveBeneficiary",
+                    "nameLocations": [
+                      "2802:17:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4694,
+                    "src": "2802:17:14"
+                  },
+                  "referencedDeclaration": 4694,
+                  "src": "2802:17:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_ActiveBeneficiary_$4694_storage_ptr",
+                    "typeString": "struct MinerTypes.ActiveBeneficiary"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4645,
+                "mutability": "mutable",
+                "name": "proposed",
+                "nameLocation": "2861:8:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4646,
+                "src": "2836:33:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_PendingBeneficiaryChange_$4709_storage_ptr",
+                  "typeString": "struct MinerTypes.PendingBeneficiaryChange"
+                },
+                "typeName": {
+                  "id": 4644,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4643,
+                    "name": "PendingBeneficiaryChange",
+                    "nameLocations": [
+                      "2836:24:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4709,
+                    "src": "2836:24:14"
+                  },
+                  "referencedDeclaration": 4709,
+                  "src": "2836:24:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_PendingBeneficiaryChange_$4709_storage_ptr",
+                    "typeString": "struct MinerTypes.PendingBeneficiaryChange"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "GetBeneficiaryReturn",
+            "nameLocation": "2771:20:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "2764:112:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.ChangeWorkerAddressParams",
+            "documentation": {
+              "id": 4647,
+              "nodeType": "StructuredDocumentation",
+              "src": "2882:112:14",
+              "text": "@param new_worker the new worker address.\n @param new_control_addresses the new controller addresses."
+            },
+            "id": 4655,
+            "members": [
+              {
+                "constant": false,
+                "id": 4650,
+                "mutability": "mutable",
+                "name": "new_worker",
+                "nameLocation": "3065:10:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4655,
+                "src": "3042:33:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4649,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4648,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "3042:11:14",
+                      "3054:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "3042:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "3042:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4654,
+                "mutability": "mutable",
+                "name": "new_control_addresses",
+                "nameLocation": "3110:21:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4655,
+                "src": "3085:46:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4652,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 4651,
+                      "name": "CommonTypes.FilAddress",
+                      "nameLocations": [
+                        "3085:11:14",
+                        "3097:10:14"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4545,
+                      "src": "3085:22:14"
+                    },
+                    "referencedDeclaration": 4545,
+                    "src": "3085:22:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                      "typeString": "struct CommonTypes.FilAddress"
+                    }
+                  },
+                  "id": 4653,
+                  "nodeType": "ArrayTypeName",
+                  "src": "3085:24:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress[]"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "ChangeWorkerAddressParams",
+            "nameLocation": "3006:25:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "2999:139:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.ChangeMultiaddrsParams",
+            "documentation": {
+              "id": 4656,
+              "nodeType": "StructuredDocumentation",
+              "src": "3144:59:14",
+              "text": "@param new_multi_addrs the new multi-signature address."
+            },
+            "id": 4661,
+            "members": [
+              {
+                "constant": false,
+                "id": 4660,
+                "mutability": "mutable",
+                "name": "new_multi_addrs",
+                "nameLocation": "3273:15:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4661,
+                "src": "3248:40:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4658,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 4657,
+                      "name": "CommonTypes.FilAddress",
+                      "nameLocations": [
+                        "3248:11:14",
+                        "3260:10:14"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4545,
+                      "src": "3248:22:14"
+                    },
+                    "referencedDeclaration": 4545,
+                    "src": "3248:22:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                      "typeString": "struct CommonTypes.FilAddress"
+                    }
+                  },
+                  "id": 4659,
+                  "nodeType": "ArrayTypeName",
+                  "src": "3248:24:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress[]"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "ChangeMultiaddrsParams",
+            "nameLocation": "3215:22:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "3208:87:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.GetMultiaddrsReturn",
+            "documentation": {
+              "id": 4662,
+              "nodeType": "StructuredDocumentation",
+              "src": "3301:51:14",
+              "text": "@param multi_addrs the multi-signature address."
+            },
+            "id": 4667,
+            "members": [
+              {
+                "constant": false,
+                "id": 4666,
+                "mutability": "mutable",
+                "name": "multi_addrs",
+                "nameLocation": "3419:11:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4667,
+                "src": "3394:36:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4664,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 4663,
+                      "name": "CommonTypes.FilAddress",
+                      "nameLocations": [
+                        "3394:11:14",
+                        "3406:10:14"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4545,
+                      "src": "3394:22:14"
+                    },
+                    "referencedDeclaration": 4545,
+                    "src": "3394:22:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                      "typeString": "struct CommonTypes.FilAddress"
+                    }
+                  },
+                  "id": 4665,
+                  "nodeType": "ArrayTypeName",
+                  "src": "3394:24:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_FilAddress_$4545_storage_$dyn_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress[]"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "GetMultiaddrsReturn",
+            "nameLocation": "3364:19:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "3357:80:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.VestingFunds",
+            "documentation": {
+              "id": 4668,
+              "nodeType": "StructuredDocumentation",
+              "src": "3443:93:14",
+              "text": "@param epoch the epoch of funds vested.\n @param amount the amount of funds vested."
+            },
+            "id": 4675,
+            "members": [
+              {
+                "constant": false,
+                "id": 4671,
+                "mutability": "mutable",
+                "name": "epoch",
+                "nameLocation": "3594:5:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4675,
+                "src": "3571:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                  "typeString": "CommonTypes.ChainEpoch"
+                },
+                "typeName": {
+                  "id": 4670,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4669,
+                    "name": "CommonTypes.ChainEpoch",
+                    "nameLocations": [
+                      "3571:11:14",
+                      "3583:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4559,
+                    "src": "3571:22:14"
+                  },
+                  "referencedDeclaration": 4559,
+                  "src": "3571:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                    "typeString": "CommonTypes.ChainEpoch"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4674,
+                "mutability": "mutable",
+                "name": "amount",
+                "nameLocation": "3628:6:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4675,
+                "src": "3609:25:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                  "typeString": "struct CommonTypes.BigInt"
+                },
+                "typeName": {
+                  "id": 4673,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4672,
+                    "name": "CommonTypes.BigInt",
+                    "nameLocations": [
+                      "3609:11:14",
+                      "3621:6:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4541,
+                    "src": "3609:18:14"
+                  },
+                  "referencedDeclaration": 4541,
+                  "src": "3609:18:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "VestingFunds",
+            "nameLocation": "3548:12:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "3541:100:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.BeneficiaryTerm",
+            "documentation": {
+              "id": 4676,
+              "nodeType": "StructuredDocumentation",
+              "src": "3647:163:14",
+              "text": "@param quota the quota token amount.\n @param used_quota the used quota token amount.\n @param expiration the epoch that the quota will be expired."
+            },
+            "id": 4686,
+            "members": [
+              {
+                "constant": false,
+                "id": 4679,
+                "mutability": "mutable",
+                "name": "quota",
+                "nameLocation": "3867:5:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4686,
+                "src": "3848:24:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                  "typeString": "struct CommonTypes.BigInt"
+                },
+                "typeName": {
+                  "id": 4678,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4677,
+                    "name": "CommonTypes.BigInt",
+                    "nameLocations": [
+                      "3848:11:14",
+                      "3860:6:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4541,
+                    "src": "3848:18:14"
+                  },
+                  "referencedDeclaration": 4541,
+                  "src": "3848:18:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4682,
+                "mutability": "mutable",
+                "name": "used_quota",
+                "nameLocation": "3901:10:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4686,
+                "src": "3882:29:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                  "typeString": "struct CommonTypes.BigInt"
+                },
+                "typeName": {
+                  "id": 4681,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4680,
+                    "name": "CommonTypes.BigInt",
+                    "nameLocations": [
+                      "3882:11:14",
+                      "3894:6:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4541,
+                    "src": "3882:18:14"
+                  },
+                  "referencedDeclaration": 4541,
+                  "src": "3882:18:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4685,
+                "mutability": "mutable",
+                "name": "expiration",
+                "nameLocation": "3944:10:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4686,
+                "src": "3921:33:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                  "typeString": "CommonTypes.ChainEpoch"
+                },
+                "typeName": {
+                  "id": 4684,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4683,
+                    "name": "CommonTypes.ChainEpoch",
+                    "nameLocations": [
+                      "3921:11:14",
+                      "3933:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4559,
+                    "src": "3921:22:14"
+                  },
+                  "referencedDeclaration": 4559,
+                  "src": "3921:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                    "typeString": "CommonTypes.ChainEpoch"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "BeneficiaryTerm",
+            "nameLocation": "3822:15:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "3815:146:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.ActiveBeneficiary",
+            "documentation": {
+              "id": 4687,
+              "nodeType": "StructuredDocumentation",
+              "src": "3967:90:14",
+              "text": "@param beneficiary the address of the beneficiary.\n @param term BeneficiaryTerm"
+            },
+            "id": 4694,
+            "members": [
+              {
+                "constant": false,
+                "id": 4690,
+                "mutability": "mutable",
+                "name": "beneficiary",
+                "nameLocation": "4120:11:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4694,
+                "src": "4097:34:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4689,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4688,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "4097:11:14",
+                      "4109:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "4097:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "4097:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4693,
+                "mutability": "mutable",
+                "name": "term",
+                "nameLocation": "4157:4:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4694,
+                "src": "4141:20:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BeneficiaryTerm_$4686_storage_ptr",
+                  "typeString": "struct MinerTypes.BeneficiaryTerm"
+                },
+                "typeName": {
+                  "id": 4692,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4691,
+                    "name": "BeneficiaryTerm",
+                    "nameLocations": [
+                      "4141:15:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4686,
+                    "src": "4141:15:14"
+                  },
+                  "referencedDeclaration": 4686,
+                  "src": "4141:15:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BeneficiaryTerm_$4686_storage_ptr",
+                    "typeString": "struct MinerTypes.BeneficiaryTerm"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "ActiveBeneficiary",
+            "nameLocation": "4069:17:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "4062:106:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.PendingBeneficiaryChange",
+            "documentation": {
+              "id": 4695,
+              "nodeType": "StructuredDocumentation",
+              "src": "4174:358:14",
+              "text": "@param new_beneficiary the new beneficiary address.\n @param new_quota the new quota token amount.\n @param new_expiration the epoch that the new quota will be expired.\n @param approved_by_beneficiary if this proposal is approved by beneficiary or not.\n @param approved_by_nominee if this proposal is approved by nominee or not."
+            },
+            "id": 4709,
+            "members": [
+              {
+                "constant": false,
+                "id": 4698,
+                "mutability": "mutable",
+                "name": "new_beneficiary",
+                "nameLocation": "4602:15:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4709,
+                "src": "4579:38:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                  "typeString": "struct CommonTypes.FilAddress"
+                },
+                "typeName": {
+                  "id": 4697,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4696,
+                    "name": "CommonTypes.FilAddress",
+                    "nameLocations": [
+                      "4579:11:14",
+                      "4591:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4545,
+                    "src": "4579:22:14"
+                  },
+                  "referencedDeclaration": 4545,
+                  "src": "4579:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_FilAddress_$4545_storage_ptr",
+                    "typeString": "struct CommonTypes.FilAddress"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4701,
+                "mutability": "mutable",
+                "name": "new_quota",
+                "nameLocation": "4646:9:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4709,
+                "src": "4627:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                  "typeString": "struct CommonTypes.BigInt"
+                },
+                "typeName": {
+                  "id": 4700,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4699,
+                    "name": "CommonTypes.BigInt",
+                    "nameLocations": [
+                      "4627:11:14",
+                      "4639:6:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4541,
+                    "src": "4627:18:14"
+                  },
+                  "referencedDeclaration": 4541,
+                  "src": "4627:18:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4704,
+                "mutability": "mutable",
+                "name": "new_expiration",
+                "nameLocation": "4688:14:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4709,
+                "src": "4665:37:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                  "typeString": "CommonTypes.ChainEpoch"
+                },
+                "typeName": {
+                  "id": 4703,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 4702,
+                    "name": "CommonTypes.ChainEpoch",
+                    "nameLocations": [
+                      "4665:11:14",
+                      "4677:10:14"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 4559,
+                    "src": "4665:22:14"
+                  },
+                  "referencedDeclaration": 4559,
+                  "src": "4665:22:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_userDefinedValueType$_ChainEpoch_$4559",
+                    "typeString": "CommonTypes.ChainEpoch"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4706,
+                "mutability": "mutable",
+                "name": "approved_by_beneficiary",
+                "nameLocation": "4717:23:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4709,
+                "src": "4712:28:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 4705,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4712:4:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4708,
+                "mutability": "mutable",
+                "name": "approved_by_nominee",
+                "nameLocation": "4755:19:14",
+                "nodeType": "VariableDeclaration",
+                "scope": 4709,
+                "src": "4750:24:14",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 4707,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4750:4:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "PendingBeneficiaryChange",
+            "nameLocation": "4544:24:14",
+            "nodeType": "StructDefinition",
+            "scope": 4716,
+            "src": "4537:244:14",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "MinerTypes.SectorSize",
+            "id": 4715,
+            "members": [
+              {
+                "id": 4710,
+                "name": "_2KiB",
+                "nameLocation": "4813:5:14",
+                "nodeType": "EnumValue",
+                "src": "4813:5:14"
+              },
+              {
+                "id": 4711,
+                "name": "_8MiB",
+                "nameLocation": "4828:5:14",
+                "nodeType": "EnumValue",
+                "src": "4828:5:14"
+              },
+              {
+                "id": 4712,
+                "name": "_512MiB",
+                "nameLocation": "4843:7:14",
+                "nodeType": "EnumValue",
+                "src": "4843:7:14"
+              },
+              {
+                "id": 4713,
+                "name": "_32GiB",
+                "nameLocation": "4860:6:14",
+                "nodeType": "EnumValue",
+                "src": "4860:6:14"
+              },
+              {
+                "id": 4714,
+                "name": "_64GiB",
+                "nameLocation": "4876:6:14",
+                "nodeType": "EnumValue",
+                "src": "4876:6:14"
+              }
+            ],
+            "name": "SectorSize",
+            "nameLocation": "4792:10:14",
+            "nodeType": "EnumDefinition",
+            "src": "4787:101:14"
+          }
+        ],
+        "scope": 4717,
+        "src": "1042:3848:14",
+        "usedErrors": [],
+        "usedEvents": []
+      }
+    ],
+    "src": "880:4011:14"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.23+commit.f704f362.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2023-12-09T09:39:34.838Z",
+  "devdoc": {
+    "author": "Zondax AG",
+    "kind": "dev",
+    "methods": {},
+    "title": "Filecoin miner actor types for Solidity.",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
