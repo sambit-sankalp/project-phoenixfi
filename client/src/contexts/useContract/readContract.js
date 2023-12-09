@@ -20,10 +20,12 @@ const getSPData =async(contract, miner)=>{
       }
       let arr=[];
       const counter = await contract.methods.counter().call();
+      // console.log(counter)
       for(let i=0;i<counter;i++){
 
-          const res = await contract.methods.SPstoreArray[i];
-        arr.push(res);
+          const res = await contract.methods.SPstoreArray(i).call();
+          const res2 = await contract.methods.SPstore(res).call();
+          arr.push(res2);
       }
       return arr;
     
@@ -44,4 +46,11 @@ const getSPData =async(contract, miner)=>{
     // console.log(res)
     return res;
   }
-  export {PreviewSwap,getAllSPs,getSPData,getTotalCount,PreviewSharesSwap}
+  const currentSPinfo = async(contract,account)=>{
+    if(!contract){
+      return false;
+  }
+  const res = await contract.methods.SPstore(account).call();
+  return res;
+  }
+  export {PreviewSwap,getAllSPs,getSPData,getTotalCount,PreviewSharesSwap,currentSPinfo}

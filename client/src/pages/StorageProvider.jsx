@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { Layout } from '../components/Layout/Layout';
 import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faSignIn } from '@fortawesome/free-solid-svg-icons';
-
+import Web3Context from '../contexts';
+import {register,request,changeBeneficiary} from '../contexts/useContract/writeContract';
+import { getAllSPs,currentSPinfo } from '../contexts/useContract/readContract';
+import Web3 from "web3"
 const StorageProvider = () => {
+  const web3 = new Web3(window.ethereum);
   const [formID, setformID] = useState(1);
   const formIds = [1, 2];
-
+  const {_StorageContract,account} = useContext(Web3Context)
   const [isRegistered, setisRegistered] = useState(false);
-
+  const [loan,setLoan]= useState(0);
+  const [SP,setSP] = useState('');
+  useEffect(()=>{
+    currentSPinfo(_StorageContract,account.currentAccount).then(res=>{
+      console.log(res)
+      setSP(res)
+    })
+  },[_StorageContract,account])
+  const handleLoanAmount = (e)=>{
+    
+    setLoan(e.target.value)
+  }
+  const handlerequest = ()=>{
+    // const balance = web3.utils.toWei(loan, "ether");
+    // request(_StorageContract,account.currentAccount,balance).then(()=>{
+    //   alert("Loan requested.. Please wait for approval");
+    // })
+    setformID(formID+1)
+  }
+  const handleBenef = ()=>{
+    changeBeneficiary(_StorageContract,account.currentAccount,)
+  }
   const handleForm = (id) => {
     switch (id) {
       case 1:
@@ -32,15 +57,17 @@ const StorageProvider = () => {
                   id="loan"
                   class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
                   placeholder="997.98"
+                  onChange={handleLoanAmount}
+                  value={loan}
                   required
                 />
               </div>
             </div>
             <div
-              onClick={() => setformID(formID + 1)}
+              onClick={handlerequest}
               className="inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
             >
-              Go Next
+              Request
               <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
             </div>
           </div>
@@ -54,15 +81,21 @@ const StorageProvider = () => {
             </h3>
             <div className="mt-0 w-40 border-b-2 border-secondary-500"></div>
             <p class="mb-4 mt-6 w-full text-[13px] font-medium text-white">
-              <span className="font-bold">Loan Amount:</span> 1000
+              <span className="font-bold">Loan Amount:</span> {web3.utils.fromWei(SP.currentLoan)} FIL
             </p>
             <p class="mb-4 w-full text-[13px] font-medium text-white">
-              <span className="font-bold">Reputation Score:</span> 550.23
+              <span className="font-bold">Calculated reputation Score:</span> {SP.reputation_score}
             </p>
             <p class="mb-4 w-full text-[13px] font-medium text-white">
-              <span className="font-bold">Collateral Needed:</span> 678.89
+              <span className="font-bold">Collateral to Pledge:</span> {SP.collateral}
             </p>
-            <div class="mb-4 flex w-full items-center justify-center">
+            <p class="mb-4 w-full text-[13px] font-medium text-white">
+              <span className="font-bold">Estimated Epoch: 518,400(~6 mo)</span>
+            </p>
+            <p class="mb-4 w-full text-[13px] font-medium text-white">
+              <span className="font-bold">Beneficiary ActorId: t059850</span>
+            </p>
+            {/* <div class="mb-4 flex w-full items-center justify-center">
               <div class="w-full whitespace-nowrap">
                 <label
                   for="address"
@@ -78,9 +111,9 @@ const StorageProvider = () => {
                   required
                 />
               </div>
-            </div>
+            </div> */}
             <div
-              onClick={() => setformID(formID + 1)}
+              onClick={handleBenef}
               className="inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
             >
               Go Next
@@ -164,7 +197,13 @@ const StorageProvider = () => {
         ) : (
           <ButtonGroup className="block">
             <div
-              onClick={() => setisRegistered(true)}
+              onClick={() => {
+                // register(_StorageContract,account.currentAccount).then(()=>{
+                //   alert("Succesfully registered")
+                // }
+                // )
+                setisRegistered(true)
+              }}
               className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-3xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
             >
               <FontAwesomeIcon icon={faSignIn} />

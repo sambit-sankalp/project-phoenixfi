@@ -1,27 +1,45 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import { Layout } from '../components/Layout/Layout';
 import Web3Context from '../contexts';
 import { setParams } from '../contexts/useContract/writeContract';
+import { getAllSPs } from '../contexts/useContract/readContract';
+import Web3 from "web3"
 const AdminPage = () => {
+  const web3 = new Web3(window.ethereum);
+
   const {_StorageContract,account} = useContext(Web3Context)
   const[minerAddress,setMinerAddress] = useState('');
+  const[data,setData]=useState([]);
+  const arr=['requested','approved','notApproved'];
   // const[loanAmount,setLoanAmount] = useState('');
   const[reputationScore,setreputationScore] = useState('');
   const[collateral,setCollateral] = useState('');
+  const[collateralWei,setCollateralWei] = useState('');
+
+  useEffect(()=>{
+  getAllSPs(_StorageContract).then((res)=>{
+    console.log(res)
+    setData(res)
+  })
+  },[_StorageContract,account])
   const handleMinerAddress = (e)=>{
     setMinerAddress(e.target.value);
   }
   // const handleLoanAmount = ()=>{
   //   setLoanAmount(e.target.value);
   // }
-  const handlereputation = ()=>{
+  const handlereputation = (e)=>{
     setreputationScore(e.target.value)
   }
-  const handlecollateral = ()=>{
+  const handlecollateral = (e)=>{
     setCollateral(e.target.value)
+    setCollateralWei(web3.utils.toWei(e.target.value, "ether"))
   }
-  const handleAdd = ()=>{
-    setParams(_StorageContract,account.currentAccount,minerAddress,collateral);
+  const handleAdd = (e)=>{
+    e.preventDefault()
+    setParams(_StorageContract,account.currentAccount,reputationScore,minerAddress,collateral).then(()=>{
+      alert("info added and Loan Approved")
+    });
   }
 
   return (
@@ -33,7 +51,7 @@ const AdminPage = () => {
               for="mineraddress"
               class=" mb-2 block text-lg font-medium text-secondary-500"
             >
-              Miner ID
+              Miner ethAddress
             </label>
             <input
               type="text"
@@ -41,7 +59,7 @@ const AdminPage = () => {
               value = {minerAddress}
               id="mineraddress"
               class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
-              placeholder="f01234567"
+              placeholder="0x721d857...6279A7	"
               required
             />
           </div>
@@ -109,6 +127,9 @@ const AdminPage = () => {
                   Miner ID
                 </th>
                 <th scope="col" class="px-6 py-3">
+                  eth address
+                </th>
+                <th scope="col" class="px-6 py-3">
                   Loan
                 </th>
                 <th scope="col" class="px-6 py-3">
@@ -123,15 +144,22 @@ const AdminPage = () => {
               </tr>
             </thead>
             <tbody className="bg-[#43454b] text-white">
-              <tr class="">
-                <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">
-                  f01233456
-                </th>
-                <td class="px-6 py-4">650</td>
-                <td class="px-6 py-4">650</td>
-                <td class="px-6 py-4">240.04</td>
-                <td class="px-6 py-4"></td>
-              </tr>
+              
+                {data && data.map((d) => (
+                  <tr class="">
+                    <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">
+                    t0{d.actorid}
+                  </th>
+                  <td class="px-6 py-4">{d.ethAddress}</td>
+                  <td class="px-6 py-4">{web3.utils.fromWei(d.currentLoan)} FIL</td>
+                  <td class="px-6 py-4">{d.reputation_score}</td>
+                  <td class="px-6 py-4">{d.collateral}</td>
+
+                  <td class="px-6 py-4">{arr[d.status]}</td>
+                </tr>
+                ))}
+                
+              
             </tbody>
           </table>
         </div>
