@@ -7,7 +7,7 @@ const ContentImageData = [
     title: 'Stake FIL',
     content: 'Select an amount of FIL to stake on Collectif DAO application.',
     align: 'right',
-    image: '/stk.png',
+    image: 'https://res.cloudinary.com/amznpersonal1/image/upload/v1702181247/wfkhye1ejmxqcusezzyl.png',
   },
   {
     id: uuid(),
@@ -15,7 +15,7 @@ const ContentImageData = [
     content:
       'Receive clFIL which automatically increases in value from Filecoin mining rewards',
     align: 'left',
-    image: '/loan.png',
+    image: 'https://res.cloudinary.com/amznpersonal1/image/upload/v1702181247/wfkhye1ejmxqcusezzyl.png',
   },
   {
     id: uuid(),
@@ -23,7 +23,7 @@ const ContentImageData = [
     content:
       'Help growing Filecoin with storage capacity by allocating FIL to network’s top Storage Providers',
     align: 'right',
-    image: '/onchain reputation cal.png',
+    image: 'https://res.cloudinary.com/amznpersonal1/image/upload/v1702181246/ebc4zgnu5bmlmjyjr7ji.png',
   },
 ];
 

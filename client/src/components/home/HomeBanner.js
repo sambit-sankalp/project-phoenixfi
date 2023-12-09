@@ -55,7 +55,7 @@ export const HomeBanner = () => {
         <MotionBTTContainer transition={{ delay: 0.8, duration: 0.5 }}>
           <div className="page-banner--image">
             <img
-              src="/rect1195.png"
+              src="https://res.cloudinary.com/amznpersonal1/image/upload/v1702181247/q2jxpbvv6ar2qxjhln22.png"
               alt="Page Banner"
               objectFit="cover"
               className="mx-auto h-[630px] w-[1024px]"
