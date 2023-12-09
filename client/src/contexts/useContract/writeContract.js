@@ -73,4 +73,4 @@ const setSPContract = async(contract,account,address)=>{
 
 } 
 
-    
+export {addAdmin,setSPContract,setParams,request,lend,unStake,stake,register}

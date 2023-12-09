@@ -1,38 +1,46 @@
-import React, { useState,useContext } from 'react';
-import StakeLayout from '../components/Layout/StakeLayout';
-import { ButtonGroup } from '../components/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Web3Context from '../contexts';
-import { faArrowsRotate, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { PreviewSwap } from '../contexts/useContract/readContract';
+import React, { useState, useContext } from "react";
+import StakeLayout from "../components/Layout/StakeLayout";
+import { ButtonGroup } from "../components/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Web3Context from "../contexts";
+import { faArrowsRotate, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { PreviewSwap } from "../contexts/useContract/readContract";
+import { stake, unStake } from "../contexts/useContract/writeContract";
+import Web3 from 'web3';
+
 
 const StakePage = () => {
-  const [state, setState] = useState('Stake');
-  const stakeStates = ['Stake', 'Unstake'];
+  const [state, setState] = useState("Stake");
+  const stakeStates = ["Stake", "Unstake"];
   const [stakeFIL, setstakeFIL] = useState(0);
   const [stakepFIL, setstakepFIL] = useState(0);
   const [swapState, setSwapState] = useState(false);
-  const {account,balance,pFIL,_Pool} = useContext(Web3Context)
-  const handleChangeFIL = async(e) => {
+  const { account, balance, pFIL, _Pool } = useContext(Web3Context);
+  const handleChangeFIL = async (e) => {
     setstakeFIL(e.target.value);
-    const res = await PreviewSwap(_Pool,e.target.value)
+    const res = await PreviewSwap(_Pool, e.target.value);
     setstakepFIL(res);
-  }
-  
+  };
+
   const handleChangepFIL = (e) => {
     setstakeFIL(e.target.value);
-  }
+  };
 
   return (
     <StakeLayout>
-      
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
-        {swapState && <div className='fixed w-screen h-screen bg-black/50  z-10 flex justify-center items-center backdrop-blur-sm'>
-          <div className='bg-white z-20 w-[25%] h-[30%] flex justify-center items-center '>
-             <button className='bg-red-800' onClick={() => setSwapState(false)}>X</button>
+        {swapState && (
+          <div className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="z-20 flex h-[30%] w-[25%] items-center justify-center bg-white ">
+              <button
+                className="bg-red-800"
+                onClick={() => setSwapState(false)}
+              >
+                X
+              </button>
+            </div>
           </div>
-
-        </div>}
+        )}
         <div className="mb-3 grid w-[500px] grid-cols-2 rounded-lg bg-bgprimary p-2">
           {stakeStates.map((stake, index) => (
             <h1
@@ -67,12 +75,15 @@ const StakePage = () => {
                 <div className="flex items-start justify-center py-2">
                   <img src="./fccoin.png" alt="filecoin" className="h-6 w-6" />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                   {pFIL}pFIL
+                    {pFIL}pFIL
                   </p>
                 </div>
               </div>
             </div>
-            <button onClick={() => setSwapState(true)} className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700">
+            <button
+              onClick={() => setSwapState(true)}
+              className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700"
+            >
               <FontAwesomeIcon
                 icon={faArrowsRotate}
                 className="mr-2 transform transition duration-500 ease-in-out hover:rotate-180"
@@ -110,7 +121,7 @@ const StakePage = () => {
                     onChange={handleChangeFIL}
                     type="number"
                     id="stake"
-                    value = {stakeFIL}
+                    value={stakeFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
                     placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
                   />
@@ -131,7 +142,7 @@ const StakePage = () => {
                   <input
                     type="number"
                     id="stakepFIL"
-                    value = {stakepFIL}
+                    value={stakepFIL}
                     onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
                     placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
@@ -147,7 +158,16 @@ const StakePage = () => {
             </div>
           </div>
           <ButtonGroup className="w-full">
-            <p className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
+            <p
+              onClick={() => {
+                state == "Stake"
+                  ? stake(_Pool, account.currentAccount, stakeFIL).then(() => {
+                      alert("Staked Successfully!");
+                    })
+                  : unStake(_Pool, account.currentAccount, stakepFIL);
+              }}
+              className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
+            >
               {state}
             </p>
           </ButtonGroup>

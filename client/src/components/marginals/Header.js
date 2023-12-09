@@ -17,7 +17,7 @@ export const Header = ({ isStakePage = false }) => {
         <div className="header-logo--container">
           <h1 className="logo mb-0">
             <Link to="/">
-              <h1 className="text-[25px] font-bold text-white">Storeoli</h1>
+              <h1 className="text-[25px] font-bold text-white">Phoenix.fi</h1>
             </Link>
           </h1>
         </div>
