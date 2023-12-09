@@ -36,4 +36,12 @@ const getSPData =async(contract, miner)=>{
     // console.log(res)
     return res;
   }
-  export {PreviewSwap,getAllSPs,getSPData,getTotalCount}
+  const PreviewSharesSwap = async(contract,shares=0)=>{
+    if(!contract){
+        return false;
+    }
+    const res = await contract.methods.previewRedeem(shares).call()
+    // console.log(res)
+    return res;
+  }
+  export {PreviewSwap,getAllSPs,getSPData,getTotalCount,PreviewSharesSwap}

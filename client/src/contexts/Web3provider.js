@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Pool from '../contracts/Pool.json';
 import StorageProviderContract from '../contracts/StorageProviderContract.json';
-
 import { Web3Context } from './index';
 import Web3 from 'web3';
 

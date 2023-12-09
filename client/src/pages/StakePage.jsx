@@ -4,26 +4,37 @@ import { ButtonGroup } from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Web3Context from "../contexts";
 import { faArrowsRotate, faWallet } from "@fortawesome/free-solid-svg-icons";
-import { PreviewSwap } from "../contexts/useContract/readContract";
+import {
+  PreviewSwap,
+  PreviewSharesSwap,
+} from "../contexts/useContract/readContract";
 import { stake, unStake } from "../contexts/useContract/writeContract";
-import Web3 from 'web3';
-
+import Web3 from "web3";
 
 const StakePage = () => {
+  const web3 = new Web3(window.ethereum);
   const [state, setState] = useState("Stake");
   const stakeStates = ["Stake", "Unstake"];
   const [stakeFIL, setstakeFIL] = useState(0);
   const [stakepFIL, setstakepFIL] = useState(0);
+  const [FILamount, setFILamount] = useState(0);
+  const [pFILamount, setpFILamount] = useState(0);
   const [swapState, setSwapState] = useState(false);
   const { account, balance, pFIL, _Pool } = useContext(Web3Context);
   const handleChangeFIL = async (e) => {
+    const balance = web3.utils.toWei(e.target.value, "ether");
+    setFILamount(balance);
     setstakeFIL(e.target.value);
     const res = await PreviewSwap(_Pool, e.target.value);
     setstakepFIL(res);
   };
 
-  const handleChangepFIL = (e) => {
-    setstakeFIL(e.target.value);
+  const handleChangepFIL = async (e) => {
+    const balance = web3.utils.toWei(e.target.value, "ether");
+    setpFILamount(balance);
+    setstakepFIL(e.target.value);
+    const res = await PreviewSharesSwap(_Pool, e.target.value);
+    setstakeFIL(res);
   };
 
   return (
@@ -46,7 +57,7 @@ const StakePage = () => {
             <h1
               key={`${stake}-${index}`}
               className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
+                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
               }`}
               onClick={() => {
                 setState(stake);
@@ -115,7 +126,7 @@ const StakePage = () => {
           </div> */}
           <div
             className={`flex w-full  ${
-              state === 'Stake' ? 'flex-col' : 'flex-col-reverse'
+              state === "Stake" ? "flex-col" : "flex-col-reverse"
             } items-center justify-center`}
           >
             <div className="mt-4 w-full">
@@ -138,8 +149,8 @@ const StakePage = () => {
                     id="stake"
                     value={stakeFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
-                    disabled={state === 'Stake' ? false : true}
+                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
+                    disabled={state === "Stake" ? false : true}
                   />
                 </div>
               </div>
@@ -159,8 +170,8 @@ const StakePage = () => {
                     value={stakepFIL}
                     onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
-                    disabled={state === 'Stake' ? true : false}
+                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
+                    disabled={state === "Stake" ? true : false}
                   />
                 </div>
               </div>
@@ -170,10 +181,12 @@ const StakePage = () => {
             <p
               onClick={() => {
                 state == "Stake"
-                  ? stake(_Pool, account.currentAccount, stakeFIL).then(() => {
+                  ? stake(_Pool, account.currentAccount, FILamount).then(() => {
                       alert("Staked Successfully!");
                     })
-                  : unStake(_Pool, account.currentAccount, stakepFIL);
+                  : unStake(_Pool, account.currentAccount, pFILamount).then(()=>{
+                    alert("Unstake Succesful !")
+                  });
               }}
               className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
             >

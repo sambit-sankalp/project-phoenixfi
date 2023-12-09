@@ -22,8 +22,8 @@ const stake = async (contract,account,amount) => {
         return false;
       }
       const res = await contract.methods
-        .stake(amount,account)
-        .send({ from: account });
+        .stake(amount)
+        .send({ from: account,value:amount });
       return res;
     };
     //unstake
