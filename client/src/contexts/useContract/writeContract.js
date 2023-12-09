@@ -39,12 +39,38 @@ const unStake = async(contract,account,amount)=>{
 
 //lend
 const lend = async(contract,account,amount)=>{
-    console.log(contract);
     if(!contract){
         return false;
     }
     const res = await contract.methods.lend().send({from:account,value:amount})
+    return res;
 } 
 //request
+const request = async(contract,account,amount)=>{
+    if(!contract){
+        return false;
+    }
+    const res =  await contract.methods.request(amount).send({from:account})
+    return res;
+
+}
+
+//set params
+
+const setParams = async(contract,account,score,miner,collateral)=>{
+    if(!contract){
+        return false;
+    }
+    const res = await contract.methods.setParams(score,miner,collateral).send({from:account});
+    return res;
+}
+
+const setSPContract = async(contract,account,address)=>{
+    if(!contract){
+        return false;
+    }
+    const res = await contract.methods.setStorageProvider(address).send({from:account});
+
+} 
 
     
