@@ -6,6 +6,7 @@ import Web3Context from './contexts';
 
 import HomePage from './pages/HomePage';
 import StakePage from './pages/StakePage';
+import AdminPage from './pages/AdminPage';
 
 const App = () => {
   window.ethereum &&
@@ -23,6 +24,7 @@ const App = () => {
     <Routes>
       <Route exact path="/" element={<HomePage />} />
       <Route exact path="/stake" element={<StakePage />} />
+      <Route exact path="/admin" element={<AdminPage />} />
     </Routes>
   );
 };
