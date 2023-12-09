@@ -28,7 +28,7 @@ export const Header = ({ isStakePage = false }) => {
                 <div className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#01ACE4] hover:via-[#00C1BD] hover:to-[#00FFFA] hover:text-black md:w-auto">
                   {balance}
                   <img
-                    src="./filecoin-logo.svg"
+                    src="/filecoin-logo.svg"
                     alt="fccoin"
                     className="h-7 w-7"
                   />

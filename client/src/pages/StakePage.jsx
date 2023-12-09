@@ -94,7 +94,7 @@ const StakePage = () => {
               <div className="ml-2 flex w-10/12 items-center justify-between rounded-lg bg-bgprimary px-4 py-0">
                 <div className="flex items-start justify-center py-2">
                   <img
-                    src="./filecoin-logo.svg"
+                    src="/filecoin-logo.svg"
                     alt="filecoin"
                     className="h-6 w-6"
                   />
@@ -103,7 +103,7 @@ const StakePage = () => {
                   </p>
                 </div>
                 <div className="flex items-start justify-center py-2">
-                  <img src="./fccoin.png" alt="filecoin" className="h-6 w-6" />
+                  <img src="/fccoin.png" alt="filecoin" className="h-6 w-6" />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
                     {pFIL}pFIL
                   </p>
@@ -149,7 +149,7 @@ const StakePage = () => {
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
                 <div className="flex items-center justify-center">
                   <img
-                    src="./filecoin-logo.svg"
+                    src="/filecoin-logo.svg"
                     alt="filecoin"
                     className="h-8 w-8"
                   />
@@ -173,7 +173,7 @@ const StakePage = () => {
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
                 <div className="flex items-center justify-center">
-                  <img src="./fccoin.png" alt="filecoin" className="h-8 w-8" />
+                  <img src="/fccoin.png" alt="filecoin" className="h-8 w-8" />
                   <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
                     pFIL:
                   </h5>
@@ -352,7 +352,7 @@ const CurrencyExchange = ({ coinData, account, setSwapState }) => {
           <FontAwesomeIcon icon={faRetweet} className="h-6 w-6 text-white" />
           <div className="ml-3 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2  text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto">
             FIL
-            <img src="./filecoin-logo.svg" alt="filecoin" className="h-6 w-6" />
+            <img src="/filecoin-logo.svg" alt="filecoin" className="h-6 w-6" />
           </div>
           <div
             onClick={() => swap()}
