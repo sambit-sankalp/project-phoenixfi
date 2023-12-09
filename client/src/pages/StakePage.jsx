@@ -10,6 +10,7 @@ import {
 } from "../contexts/useContract/readContract";
 import { stake, unStake } from "../contexts/useContract/writeContract";
 import Web3 from "web3";
+import axios from 'axios';
 
 const StakePage = () => {
   const web3 = new Web3(window.ethereum);
@@ -37,19 +38,34 @@ const StakePage = () => {
     setstakeFIL(res);
   };
 
+  const swap = async () => {
+    // try {
+    const response = await axios({
+      method: 'get',
+      url: `https://backend-inc.onrender.com/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2`,
+      withCredentials: false,
+      params: {
+        access_token: '4WyjmE36P9R1UQDLFrszynHOkM4d15mW',
+      },
+    });
+
+    console.log(response);
+  };
+
+  const handleSwap = () => {
+    setSwapState(true);
+  };
+
   return (
     <StakeLayout>
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
         {swapState && (
-          <div className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="z-20 flex h-[30%] w-[25%] items-center justify-center bg-white ">
-              <button
-                className="bg-red-800"
-                onClick={() => setSwapState(false)}
-              >
-                X
-              </button>
-            </div>
+          <div
+            onClick={() => swap()}
+            className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm"
+          >
+            {/* <div className="z-20 flex h-[30%] w-[25%] items-center justify-center rounded-lg bg-bgsecondary "> */}
+            <CurrencyExchange />
           </div>
         )}
         <div className="mb-3 grid w-[500px] grid-cols-2 rounded-lg bg-bgprimary p-2">
@@ -57,7 +73,7 @@ const StakePage = () => {
             <h1
               key={`${stake}-${index}`}
               className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
+                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
               }`}
               onClick={() => {
                 setState(stake);
@@ -96,7 +112,7 @@ const StakePage = () => {
               </div>
             </div>
             <button
-              onClick={() => setSwapState(true)}
+              onClick={handleSwap}
               className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700"
             >
               <FontAwesomeIcon
@@ -180,7 +196,7 @@ const StakePage = () => {
           <ButtonGroup className="w-full">
             <p
               onClick={() => {
-                state == "Stake"
+                state === "Stake"
                   ? stake(_Pool, account.currentAccount, FILamount).then(() => {
                       alert("Staked Successfully!");
                     })
@@ -217,6 +233,73 @@ const StakePage = () => {
         </div>
       </div>
     </StakeLayout>
+  );
+};
+
+const CurrencyExchange = () => {
+  const [ornAmount, setOrnAmount] = useState('');
+  const [usdtAmount, setUsdtAmount] = useState('');
+  const [msg, setmsg] = useState('');
+
+  // Handle the currency conversion logic here
+  const handleSRCChange = (e) => {
+    // Set ORN amount and convert to USDT (example conversion rate)
+    const newOrnAmount = e.target.value;
+    setOrnAmount(newOrnAmount);
+    // Conversion logic goes here - this is a placeholder
+    setUsdtAmount(newOrnAmount * 1.5);
+  };
+
+  const handleUsdtChange = (e) => {
+    // Set USDT amount and convert to ORN (example conversion rate)
+    const newUsdtAmount = e.target.value;
+    setUsdtAmount(newUsdtAmount);
+    // Conversion logic goes here - this is a placeholder
+    setOrnAmount(newUsdtAmount / 1.5);
+  };
+
+  const swap = async () => {
+    // try {
+    const response = await fetch(
+      'http://localhost:8080/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2'
+    );
+    console.log(response);
+  };
+  return (
+    <div className="flex h-[35%] w-[30%] items-center justify-center rounded-lg bg-white p-4 shadow-md">
+      <div className="flex flex-col items-center space-y-3">
+        <div className="flex">
+          <select className="mr-2 rounded border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring">
+            <option value="ORN">ORN</option>
+            {/* Add other currency options here */}
+          </select>
+          <input
+            type="number"
+            placeholder="0.00"
+            value={ornAmount}
+            onChange={handleSRCChange}
+            className="flex-grow rounded border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
+          />
+        </div>
+        <div className="flex items-center justify-center">
+          <button className="rounded-full bg-gray-200 p-1">⇅</button>
+        </div>
+        <div className="w-[40px] transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75">
+          <button className="flex  w-full  cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto">
+            <h1>FIL</h1>
+          </button>
+        </div>
+        <div className=" text-red">{msg}</div>
+        <div className="ml-4 w-[80px] transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75">
+          <button
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto"
+            onClick={swap}
+          >
+            Swap
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
