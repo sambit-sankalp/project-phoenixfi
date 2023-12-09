@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import StakeLayout from '../components/Layout/StakeLayout';
 import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,35 +12,44 @@ const StakePage = () => {
   const [stakeFIL, setstakeFIL] = useState(0);
   const [stakepFIL, setstakepFIL] = useState(0);
   const [swapState, setSwapState] = useState(false);
-  const {account,balance,pFIL,_Pool} = useContext(Web3Context)
-  const handleChangeFIL = async(e) => {
+  const { account, balance, pFIL, _Pool } = useContext(Web3Context);
+  const handleChangeFIL = async (e) => {
     setstakeFIL(e.target.value);
-    const res = await PreviewSwap(_Pool,e.target.value)
+    const res = await PreviewSwap(_Pool, e.target.value);
     setstakepFIL(res);
-  }
-  
+  };
+
   const handleChangepFIL = (e) => {
     setstakeFIL(e.target.value);
-  }
+  };
 
   return (
     <StakeLayout>
-      
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
-        {swapState && <div className='fixed w-screen h-screen bg-black/50  z-10 flex justify-center items-center backdrop-blur-sm'>
-          <div className='bg-white z-20 w-[25%] h-[30%] flex justify-center items-center '>
-             <button className='bg-red-800' onClick={() => setSwapState(false)}>X</button>
+        {swapState && (
+          <div className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="z-20 flex h-[30%] w-[25%] items-center justify-center bg-white ">
+              <button
+                className="bg-red-800"
+                onClick={() => setSwapState(false)}
+              >
+                X
+              </button>
+            </div>
           </div>
-
-        </div>}
+        )}
         <div className="mb-3 grid w-[500px] grid-cols-2 rounded-lg bg-bgprimary p-2">
           {stakeStates.map((stake, index) => (
             <h1
               key={`${stake}-${index}`}
               className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
+                state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
               }`}
-              onClick={() => setState(stake)}
+              onClick={() => {
+                setState(stake);
+                setstakeFIL(0);
+                setstakepFIL(0);
+              }}
             >
               {stake}
             </h1>
@@ -67,12 +76,15 @@ const StakePage = () => {
                 <div className="flex items-start justify-center py-2">
                   <img src="./fccoin.png" alt="filecoin" className="h-6 w-6" />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                   {pFIL}pFIL
+                    {pFIL}pFIL
                   </p>
                 </div>
               </div>
             </div>
-            <button onClick={() => setSwapState(true)} className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700">
+            <button
+              onClick={() => setSwapState(true)}
+              className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700"
+            >
               <FontAwesomeIcon
                 icon={faArrowsRotate}
                 className="mr-2 transform transition duration-500 ease-in-out hover:rotate-180"
@@ -98,49 +110,54 @@ const StakePage = () => {
             </span>
             <span class="text-sm font-medium text-white opacity-70">100K</span>
           </div> */}
-          <div className={`flex w-full flex-col items-center justify-center`}>
+          <div
+            className={`flex w-full  ${
+              state === 'Stake' ? 'flex-col' : 'flex-col-reverse'
+            } items-center justify-center`}
+          >
             <div className="mt-4 w-full">
               <div class="relative flex w-full items-end justify-between">
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Stake Amount:{" "}
-                </h5>
+                <div className="flex items-center justify-center">
+                  <img
+                    src="./filecoin-logo.svg"
+                    alt="filecoin"
+                    className="h-8 w-8"
+                  />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    FIL:
+                  </h5>
+                </div>
                 <div className="flex items-center justify-center">
                   <input
                     onChange={handleChangeFIL}
                     type="number"
                     id="stake"
-                    value = {stakeFIL}
+                    value={stakeFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
-                  />
-                  <img
-                    src="./filecoin-logo.svg"
-                    alt="filecoin"
-                    className="h-10 w-10"
+                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
+                    disabled={state === 'Stake' ? false : true}
                   />
                 </div>
               </div>
             </div>
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Rewards:{" "}
-                </h5>
+                <div className="flex items-center justify-center">
+                  <img src="./fccoin.png" alt="filecoin" className="h-8 w-8" />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    pFIL:
+                  </h5>
+                </div>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
                     id="stakepFIL"
-                    value = {stakepFIL}
+                    value={stakepFIL}
                     onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
-                    disabled
-                  />
-                  <img
-                    src="./fccoin.png"
-                    alt="filecoin"
-                    className="h-10 w-10"
+                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
+                    disabled={state === 'Stake' ? true : false}
                   />
                 </div>
               </div>
