@@ -15,7 +15,7 @@ const StakePage = () => {
           {stakeStates.map((stake, index) => (
             <h1
               key={`${stake}-${index}`}
-              className={`col-span-1 w-full cursor-pointer text-center text-[20px] text-white ${
+              className={` duration-100 transform active:scale-50 transition-transform col-span-1 w-full cursor-pointer text-center text-[20px] text-white ${
                 state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
               }`}
               onClick={() => setState(stake)}
