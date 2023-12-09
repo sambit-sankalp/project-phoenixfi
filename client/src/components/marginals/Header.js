@@ -3,8 +3,11 @@ import { ButtonGroup } from '../Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faWallet } from '@fortawesome/free-solid-svg-icons';
+import Web3Context from '../../contexts';
+import { useContext } from 'react';
 
 export const Header = ({ isStakePage = false }) => {
+  const { connectWallet, account } = useContext(Web3Context);
   return (
     <header
       id="header"
@@ -53,12 +56,27 @@ export const Header = ({ isStakePage = false }) => {
             </ButtonGroup>
           )}
 
-          <ButtonGroup className="block">
+          {/* <ButtonGroup className="block">
             <div className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 font-semibold text-black transition-colors text-xl duration-300 hover:bg-secondary-500 md:w-auto">
               <FontAwesomeIcon icon={faWallet} />
               Connect Wallet
             </div>
-          </ButtonGroup>
+          </ButtonGroup> */}
+           {account.currentAccount == null ? (
+          <div
+            className="mr-24 cursor-pointer text-white bg-secondary-2 w-52 h-10 text-center rounded-xl pt-2 px-4"
+            onClick={connectWallet}
+          >
+            + Connect Wallet
+          </div>
+        ) : (
+          <div className="w-1/3 flex justify-center items-center mr-24 text-black">
+            Hey,{' '}
+            {`${String(account.currentAccount).slice(0, 9)}...${String(
+              account.currentAccount
+            ).slice(String(account.currentAccount).length - 9)}`}
+          </div>
+        )}
         </SectionContainer>
       </SectionContainer>
     </header>

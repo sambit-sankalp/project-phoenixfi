@@ -5722,7 +5722,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.8",
-  "updatedAt": "2023-12-09T09:39:35.003Z",
+  "updatedAt": "2023-12-09T16:43:06.533Z",
   "devdoc": {
     "author": "Solmate (https://github.com/transmissions11/solmate/blob/main/src/utils/FixedPointMathLib.sol)Inspired by USM (https://github.com/usmfum/USM/blob/master/contracts/WadMath.sol)",
     "kind": "dev",

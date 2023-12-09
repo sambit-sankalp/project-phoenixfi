@@ -17015,7 +17015,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.8",
-  "updatedAt": "2023-12-09T09:39:34.863Z",
+  "updatedAt": "2023-12-09T16:43:06.119Z",
   "devdoc": {
     "author": "Zondax AG",
     "details": "methods in this library try to read the data type indicated from cbor encoded data stored in bytes at a specific indexif it successes, methods will return the read value and the new index (intial index plus read bytes)",

@@ -12,6 +12,7 @@ const Web3Provider = ({ children }) => {
     accounts: null,
     currentAccount: null,
   });
+  const [balance,setBalace] = useState('');
   const [_StorageContract, setStorageontract] = useState('');
   const [_Pool, setPoolContract] = useState('');
 
@@ -50,6 +51,9 @@ const Web3Provider = ({ children }) => {
       accounts: accounts,
       currentAccount: accounts[0],
     });
+    const res = await web3.eth.getBalance(accounts[0]);
+    const balance = Number(web3.utils.fromWei(res));
+    setBalace(balance.toFixed(2))
 
     if (accounts.length !== 0) {
       getContract(chain, accounts);
@@ -87,7 +91,8 @@ const Web3Provider = ({ children }) => {
         checkIfWalletIsConnected,
         account,
         _StorageContract,
-        _Pool
+        _Pool,
+        balance
       }}
     >
       {children}

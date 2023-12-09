@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import StakeLayout from '../components/Layout/StakeLayout';
 import { ButtonGroup } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Web3Context from '../contexts';
 import { faArrowsRotate, faWallet } from '@fortawesome/free-solid-svg-icons';
 
 const StakePage = () => {
   const [state, setState] = useState('Stake');
   const stakeStates = ['Stake', 'Unstake'];
   const [swapState, setSwapState] = useState(false);
+  const {account,balance} = useContext(Web3Context)
 
   return (
     <StakeLayout>
@@ -47,13 +49,13 @@ const StakePage = () => {
                     className="h-6 w-6"
                   />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                    55 FIL
+                    {balance} FIL
                   </p>
                 </div>
                 <div className="flex items-start justify-center py-2">
                   <img src="./fccoin.png" alt="filecoin" className="h-6 w-6" />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                    55 stFIL
+                    55 pFIL
                   </p>
                 </div>
               </div>
