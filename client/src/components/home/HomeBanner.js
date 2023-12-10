@@ -55,10 +55,10 @@ export const HomeBanner = () => {
         <MotionBTTContainer transition={{ delay: 0.8, duration: 0.5 }}>
           <div className="page-banner--image">
             <img
-              src="/nutritrack-hero-banner.png"
+              src="/rect1195.png"
               alt="Page Banner"
               objectFit="cover"
-              className="mx-auto h-[680px] w-[1024px]"
+              className="mx-auto h-[630px] w-[1024px]"
             />
           </div>
         </MotionBTTContainer>
