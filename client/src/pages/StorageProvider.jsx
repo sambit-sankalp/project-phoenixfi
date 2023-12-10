@@ -36,7 +36,7 @@ const StorageProvider = () => {
     })
   }
   const handleLoan = ()=>{
-    lend(_Pool,account.currentAccount,web3.utils.toWei(SP.collateral,"ether")).then(()=>{
+    lend(_Pool,account.currentAccount,SP.collateral).then(()=>{
       alert("Loan Disbursed! Happy staking :)")
     })
   }
@@ -99,7 +99,7 @@ const StorageProvider = () => {
               <span className="font-bold">Calculated reputation Score:</span> {SP.reputation_score}
             </p>
             <p class="mb-4 w-full text-[13px] font-medium text-white">
-              <span className="font-bold">Collateral to Pledge:</span> {SP.collateral} FIL
+              <span className="font-bold">Collateral to Pledge:</span> {web3.utils.fromWei(SP.collateral)} FIL
             </p>
             <p class="mb-4 w-full text-[13px] font-medium text-white">
               <span className="font-bold">Estimated Epoch: 518,400(~6 mo)</span>
@@ -181,7 +181,7 @@ const StorageProvider = () => {
                   type="text"
                   id="collateral"
                   class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
-                  value = {SP.collateral}
+                  value = {web3.utils.fromWei(SP.collateral)}
                   // placeholder="567.89"
                   required
                 />

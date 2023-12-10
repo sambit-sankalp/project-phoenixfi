@@ -33,11 +33,13 @@ const AdminPage = () => {
   }
   const handlecollateral = (e)=>{
     setCollateral(e.target.value)
-    setCollateralWei(web3.utils.toWei(e.target.value, "ether"))
+    const res = web3.utils.toWei(e.target.value, "ether")
+    console.log(res)
+    setCollateralWei(res)
   }
   const handleAdd = (e)=>{
     e.preventDefault()
-    setParams(_StorageContract,account.currentAccount,reputationScore,minerAddress,collateral).then(()=>{
+    setParams(_StorageContract,account.currentAccount,reputationScore,minerAddress,collateralWei).then(()=>{
       alert("info added and Loan Approved")
     });
   }
@@ -156,7 +158,7 @@ const AdminPage = () => {
                   <td class="px-6 py-4">{d.ethAddress}</td>
                   <td class="px-6 py-4">{web3.utils.fromWei(d.currentLoan)} FIL</td>
                   <td class="px-6 py-4">{d.reputation_score}</td>
-                  <td class="px-6 py-4">{d.collateral}</td>
+                  <td class="px-6 py-4">{web3.utils.fromWei(d.collateral)}</td>
 
                   <td class="px-6 py-4">{arr[d.status]}</td>
                 </tr>
