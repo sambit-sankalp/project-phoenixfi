@@ -1,35 +1,87 @@
-import React, { useState } from "react";
-import StakeLayout from "../components/Layout/StakeLayout";
-import { ButtonGroup } from "../components/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faWallet } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import React, { useState, useContext, useEffect } from 'react';
+import StakeLayout from '../components/Layout/StakeLayout';
+import { ButtonGroup } from '../components/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Web3Context from '../contexts';
+import {
+  faArrowsRotate,
+  faRetweet,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  PreviewSwap,
+  PreviewSharesSwap,
+} from '../contexts/useContract/readContract';
+import { stake, unStake } from '../contexts/useContract/writeContract';
+import Web3 from 'web3';
+import axios from 'axios';
 
 const StakePage = () => {
-  const [state, setState] = useState("Stake");
-  const stakeStates = ["Stake", "Unstake"];
+  const web3 = new Web3(window.ethereum);
+  const [state, setState] = useState('Stake');
+  const stakeStates = ['Stake', 'Unstake'];
+  const [stakeFIL, setstakeFIL] = useState(0);
+  const [stakepFIL, setstakepFIL] = useState(0);
+  const [FILamount, setFILamount] = useState(0);
+  const [pFILamount, setpFILamount] = useState(0);
   const [swapState, setSwapState] = useState(false);
+  const { account, balance, pFIL, _Pool } = useContext(Web3Context);
+
+  const coinToAddress = {
+    USDC: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
+    DAI: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3',
+    FUEL: '0x2090c8295769791ab7a3cf1cc6e0aa19f35e441a',
+  };
+
+  const handleChangeFIL = async (e) => {
+    const balance = web3.utils.toWei(e.target.value, 'ether');
+    setFILamount(balance);
+    setstakeFIL(e.target.value);
+    const res = await PreviewSwap(_Pool, e.target.value);
+    setstakepFIL(res);
+  };
+
+  const handleChangepFIL = async (e) => {
+    const balance = web3.utils.toWei(e.target.value, 'ether');
+    setpFILamount(balance);
+    setstakepFIL(e.target.value);
+    const res = await PreviewSharesSwap(_Pool, e.target.value);
+    setstakeFIL(res);
+  };
+
+  const handleSwap = () => {
+    setSwapState(true);
+  };
 
   return (
     <StakeLayout>
       <div className="borderz-10 relative flex min-h-screen flex-col items-center justify-center bg-bgsecondary pb-20 pt-20 ">
         {swapState && (
           <div className="fixed z-10 flex h-screen  w-screen items-center justify-center bg-black/50 backdrop-blur-sm">
-            {/* <div className="z-20 flex h-[30%] w-[25%] items-center justify-center rounded-lg bg-bgsecondary "> */}
-            <CurrencyExchange />
+            <CurrencyExchange
+              coinData={coinToAddress}
+              account={account.currentAccount}
+              setSwapState={setSwapState}
+            />
           </div>
         )}
         <div className="mb-3 grid w-[500px] grid-cols-2 rounded-lg bg-bgprimary p-2">
           {stakeStates.map((stake, index) => (
-            <h1
-              key={`${stake}-${index}`}
-              className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
-                state === stake ? "w-1/2 rounded-lg bg-bgsecondary" : ``
-              }`}
-              onClick={() => setState(stake)}
-            >
-              {stake}
-            </h1>
+            <div className="flex items-center justify-center">
+              <div
+                key={`${stake}-${index}`}
+                className={` col-span-1 w-full transform cursor-pointer text-center text-[20px] text-white transition-transform duration-100 active:scale-50 ${
+                  state === stake ? 'w-1/2 rounded-lg bg-bgsecondary' : ``
+                }`}
+                onClick={() => {
+                  setState(stake);
+                  setstakeFIL(0);
+                  setstakepFIL(0);
+                }}
+              >
+                {stake}
+              </div>
+            </div>
           ))}
         </div>
         <div class="flex h-auto w-[500px] flex-col items-center justify-center rounded-lg border-2 border-black bg-bgprimary p-4 pr-2 pt-2">
@@ -47,20 +99,20 @@ const StakePage = () => {
                     className="h-6 w-6"
                   />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                    55 FIL
+                    {balance} FIL
                   </p>
                 </div>
                 <div className="flex items-start justify-center py-2">
                   <img src="./fccoin.png" alt="filecoin" className="h-6 w-6" />
                   <p className="m-0 ml-3 whitespace-nowrap text-xl text-white">
-                    55 stFIL
+                    {pFIL}pFIL
                   </p>
                 </div>
               </div>
             </div>
             <button
-              onClick={() => setSwapState(true)}
-              className="mx-2 flex transform items-center justify-center rounded-xl bg-blue-500 px-4 py-3 font-bold text-white transition duration-500 hover:bg-blue-700"
+              onClick={handleSwap}
+              className="ml-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
             >
               <FontAwesomeIcon
                 icon={faArrowsRotate}
@@ -87,52 +139,74 @@ const StakePage = () => {
             </span>
             <span class="text-sm font-medium text-white opacity-70">100K</span>
           </div> */}
-          <div className={`flex w-full flex-col items-center justify-center`}>
+          <div
+            className={`flex w-full  ${
+              state === 'Stake' ? 'flex-col' : 'flex-col-reverse'
+            } items-center justify-center`}
+          >
             <div className="mt-4 w-full">
               <div class="relative flex w-full items-end justify-between">
                 {/* <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3.5"></div> */}
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Stake Amount:{" "}
-                </h5>
                 <div className="flex items-center justify-center">
-                  <input
-                    type="number"
-                    id="stake"
-                    class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "FIL" : "stFIL"}`}
-                  />
                   <img
                     src="./filecoin-logo.svg"
                     alt="filecoin"
-                    className="h-10 w-10"
+                    className="h-8 w-8"
+                  />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    FIL:
+                  </h5>
+                </div>
+                <div className="flex items-center justify-center">
+                  <input
+                    onChange={handleChangeFIL}
+                    type="number"
+                    id="stake"
+                    value={stakeFIL}
+                    class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
+                    placeholder={`0 ${state === 'Stake' ? 'FIL' : 'stFIL'}`}
+                    disabled={state === 'Stake' ? false : true}
                   />
                 </div>
               </div>
             </div>
             <div className="mt-2 w-full">
               <div class="relative flex w-full items-end justify-between">
-                <h5 className="whitespace-nowrap text-[17px] text-white">
-                  Rewards:{" "}
-                </h5>
+                <div className="flex items-center justify-center">
+                  <img src="./fccoin.png" alt="filecoin" className="h-8 w-8" />
+                  <h5 className="ml-2 whitespace-nowrap text-[17px] text-white">
+                    pFIL:
+                  </h5>
+                </div>
                 <div className="flex items-center justify-center">
                   <input
                     type="number"
-                    id="stake"
+                    id="stakepFIL"
+                    value={stakepFIL}
+                    onChange={handleChangepFIL}
                     class="mr-3 block w-[100px] rounded-lg bg-transparent p-2.5 text-[17px] text-gray-900 text-white focus:border-none focus:bg-transparent focus:text-white"
-                    placeholder={`0 ${state === "Stake" ? "stFIL" : "FIL"}`}
-                    disabled
-                  />
-                  <img
-                    src="./fccoin.png"
-                    alt="filecoin"
-                    className="h-10 w-10"
+                    placeholder={`0 ${state === 'Stake' ? 'stFIL' : 'FIL'}`}
+                    disabled={state === 'Stake' ? true : false}
                   />
                 </div>
               </div>
             </div>
           </div>
           <ButtonGroup className="w-full">
-            <p className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
+            <p
+              onClick={() => {
+                state === 'Stake'
+                  ? stake(_Pool, account.currentAccount, FILamount).then(() => {
+                      alert('Staked Successfully!');
+                    })
+                  : unStake(_Pool, account.currentAccount, pFILamount).then(
+                      () => {
+                        alert('Unstake Succesful !');
+                      }
+                    );
+              }}
+              className="mt-3 inline-flex w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[14px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
+            >
               {state}
             </p>
           </ButtonGroup>
@@ -163,68 +237,133 @@ const StakePage = () => {
   );
 };
 
-const CurrencyExchange = () => {
-  const [ornAmount, setOrnAmount] = useState("");
-  const [usdtAmount, setUsdtAmount] = useState("");
-  const [msg, setmsg] = useState("");
-
-  // Handle the currency conversion logic here
-  const handleSRCChange = (e) => {
-    // Set ORN amount and convert to USDT (example conversion rate)
-    const newOrnAmount = e.target.value;
-    setOrnAmount(newOrnAmount);
-    // Conversion logic goes here - this is a placeholder
-    setUsdtAmount(newOrnAmount * 1.5);
-  };
-
-  const handleUsdtChange = (e) => {
-    // Set USDT amount and convert to ORN (example conversion rate)
-    const newUsdtAmount = e.target.value;
-    setUsdtAmount(newUsdtAmount);
-    // Conversion logic goes here - this is a placeholder
-    setOrnAmount(newUsdtAmount / 1.5);
-  };
+const CurrencyExchange = ({ coinData, account, setSwapState }) => {
+  const [coinAddr, setcoinAddr] = useState(coinData[Object.keys(coinData)[0]]);
+  const [amount, setamount] = useState(0);
+  const [isAlert, setisAlert] = useState(false);
+  const [error, seterror] = useState('');
 
   const swap = async () => {
     // try {
-    const response = await fetch("http://localhost:8080/swap?accountAddress=0xE513Ea0a6a9029322b81dCe1067F4BEC2ba0eFe7&srcCoinAddr=0xeca88125a5adbe82614ffc12d0db554e2e2867c8&amt=2");
-    console.log(response);
+    const response = await axios({
+      method: 'get',
+      url: `https://backend-inc.onrender.com/swap?accountAddress=${account}&srcCoinAddr=${coinAddr}&amt=${amount}`,
+      withCredentials: false,
+      params: {
+        access_token: '4WyjmE36P9R1UQDLFrszynHOkM4d15mW',
+      },
+    });
+
+    if (response.data.error) {
+      setisAlert(true);
+      seterror(response.data.error);
+      return;
+    }
   };
+
   return (
-    <div className="flex h-[35%] w-[30%] items-center justify-center rounded-lg bg-white p-4 shadow-md">
-      <div className="flex flex-col items-center space-y-3">
-        <div className="flex">
-          <select className="mr-2 rounded border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring">
-            <option value="ORN">ORN</option>
-            {/* Add other currency options here */}
-          </select>
-          <input
-            type="number"
-            placeholder="0.00"
-            value={ornAmount}
-            onChange={handleSRCChange}
-            className="flex-grow rounded border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
-          />
-        </div>
-        <div className="flex items-center justify-center">
-          <button className="rounded-full bg-gray-200 p-1">⇅</button>
-        </div>
-        <div className="w-[40px] transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75">
-          <button className="flex  w-full  cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto">
-            <h1>FIL</h1>
-          </button>
-        </div>
-        <div className=" text-red">{msg}</div>
-        <div className="ml-4 w-[80px] transform rounded-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] p-[1.6px] transition-transform active:scale-75">
+    <>
+      {isAlert && (
+        <div
+          id="toast-danger"
+          class="fixed bottom-5 right-5 mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400"
+          role="alert"
+        >
+          <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+            <svg
+              class="h-5 w-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+            </svg>
+            <span class="sr-only">Error icon</span>
+          </div>
+          <div class="ms-3 text-sm font-normal">Not enough balance</div>
           <button
-            className="inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-md bg-black  bg-transparent px-8 py-2 text-xl font-semibold text-white transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#7F00FF] hover:to-[#E100FF] hover:text-black md:w-auto"
-            onClick={swap}
+            type="button"
+            class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-white"
+            data-dismiss-target="#toast-danger"
+            aria-label="Close"
+            onClick={() => setSwapState(false)}
           >
-            Swap
+            <span class="sr-only">Close</span>
+            <svg
+              class="h-3 w-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
           </button>
+        </div>
+      )}
+      <div className="flex h-auto w-[30%] items-center justify-center rounded-lg bg-bgsecondary px-12 py-10 shadow-md">
+        <div className="flex w-full flex-col items-center justify-center space-y-3">
+          <div className="align-items flex w-9/12 justify-center">
+            <div className="flex flex-col items-start justify-start">
+              <label
+                for="token"
+                class="mb-2 block text-lg font-medium text-secondary-500"
+              >
+                Select the token
+              </label>
+              <select
+                id="token"
+                onChange={(e) => setcoinAddr(e.options[e.selectedIndex].text)}
+                class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-lg text-secondary-500"
+              >
+                {Object.keys(coinData).map((coin, index) => (
+                  <option key={coin} selected={index === 0} value={coin}>
+                    {coin}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col">
+              <label
+                for="amount"
+                class=" mb-2 block text-lg font-medium text-secondary-500"
+              >
+                Amount
+              </label>
+              <input
+                type="text"
+                onChange={(e) => setamount(e.target.value)}
+                value={amount}
+                id="amount"
+                class="ml-3 block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
+                placeholder="2"
+                required
+              />
+            </div>
+          </div>
+          <FontAwesomeIcon icon={faRetweet} className="h-6 w-6 text-white" />
+          <div className="ml-3 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2  text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto">
+            FIL
+            <img src="./filecoin-logo.svg" alt="filecoin" className="h-6 w-6" />
+          </div>
+          <div
+            onClick={() => swap()}
+            className="!mt-10 inline-flex w-full cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#01ACE4] via-[#00C1BD] to-[#00FFFA] px-8 py-2 text-xl font-semibold text-black transition-colors duration-300 hover:bg-secondary-500 md:w-auto"
+          >
+            <FontAwesomeIcon icon={faWallet} />
+            Convert
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

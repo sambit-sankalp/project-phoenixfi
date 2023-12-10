@@ -1,0 +1,633 @@
+{
+  "contractName": "CommonTypes",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Zondax AG\",\"kind\":\"dev\",\"methods\":{},\"title\":\"Filecoin actors' common types for Solidity.\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol\":\"CommonTypes\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol\":{\"keccak256\":\"0x1819b8e82cf53f0fadc446d064a380979888b97a0004f1e70c9fa1a6f4f13ed9\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://f7346f62e3317f519791256e9ecd70c44b3ed48404d8a15aa28b3490b11adabb\",\"dweb:/ipfs/QmNQLSdzyHLDN9a76XANJzkGVVdyYwYzZSRRiwv6CqwZRr\"]}},\"version\":1}",
+  "bytecode": "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220126dd9adcc5cad9840e7343647dbf88b61de084b6defa3ebd8819432443e969d64736f6c63430008170033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220126dd9adcc5cad9840e7343647dbf88b61de084b6defa3ebd8819432443e969d64736f6c63430008170033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "984:1343:13:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "984:1343:13:-:0;;;;;;;;",
+  "source": "/*******************************************************************************\n *   (c) 2022 Zondax AG\n *\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n ********************************************************************************/\n//\n// THIS CODE WAS SECURITY REVIEWED BY KUDELSKI SECURITY, BUT NOT FORMALLY AUDITED\n\n// SPDX-License-Identifier: Apache-2.0\npragma solidity ^0.8.17;\n\n\n/// @title Filecoin actors' common types for Solidity.\n/// @author Zondax AG\nlibrary CommonTypes {\n    uint constant UniversalReceiverHookMethodNum = 3726118371;\n\n    /// @param idx index for the failure in batch\n    /// @param code failure code\n    struct FailCode {\n        uint32 idx;\n        uint32 code;\n    }\n\n    /// @param success_count total successes in batch\n    /// @param fail_codes list of failures code and index for each failure in batch\n    struct BatchReturn {\n        uint32 success_count;\n        FailCode[] fail_codes;\n    }\n\n    /// @param type_ asset type\n    /// @param payload payload corresponding to asset type\n    struct UniversalReceiverParams {\n        uint32 type_;\n        bytes payload;\n    }\n\n    /// @param val contains the actual arbitrary number written as binary\n    /// @param neg indicates if val is negative or not\n    struct BigInt {\n        bytes val;\n        bool neg;\n    }\n\n    /// @param data filecoin address in bytes format\n    struct FilAddress {\n        bytes data;\n    }\n\n    /// @param data cid in bytes format\n    struct Cid {\n        bytes data;\n    }\n\n    /// @param data deal proposal label in bytes format (it can be utf8 string or arbitrary bytes string).\n    /// @param isString indicates if the data is string or raw bytes\n    struct DealLabel {\n        bytes data;\n        bool isString;\n    }\n\n    type FilActorId is uint64;\n\n    type ChainEpoch is int64;\n}\n",
+  "sourcePath": "@zondax\\filecoin-solidity\\contracts\\v0.8\\types\\CommonTypes.sol",
+  "ast": {
+    "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol",
+    "exportedSymbols": {
+      "CommonTypes": [
+        4560
+      ]
+    },
+    "id": 4561,
+    "license": "Apache-2.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4511,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "880:24:13"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "CommonTypes",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": {
+          "id": 4512,
+          "nodeType": "StructuredDocumentation",
+          "src": "907:77:13",
+          "text": "@title Filecoin actors' common types for Solidity.\n @author Zondax AG"
+        },
+        "fullyImplemented": true,
+        "id": 4560,
+        "linearizedBaseContracts": [
+          4560
+        ],
+        "name": "CommonTypes",
+        "nameLocation": "992:11:13",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 4515,
+            "mutability": "constant",
+            "name": "UniversalReceiverHookMethodNum",
+            "nameLocation": "1024:30:13",
+            "nodeType": "VariableDeclaration",
+            "scope": 4560,
+            "src": "1010:57:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4513,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1010:4:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "hexValue": "33373236313138333731",
+              "id": 4514,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1057:10:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3726118371_by_1",
+                "typeString": "int_const 3726118371"
+              },
+              "value": "3726118371"
+            },
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "CommonTypes.FailCode",
+            "documentation": {
+              "id": 4516,
+              "nodeType": "StructuredDocumentation",
+              "src": "1074:78:13",
+              "text": "@param idx index for the failure in batch\n @param code failure code"
+            },
+            "id": 4521,
+            "members": [
+              {
+                "constant": false,
+                "id": 4518,
+                "mutability": "mutable",
+                "name": "idx",
+                "nameLocation": "1190:3:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4521,
+                "src": "1183:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 4517,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1183:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4520,
+                "mutability": "mutable",
+                "name": "code",
+                "nameLocation": "1210:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4521,
+                "src": "1203:11:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 4519,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1203:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "FailCode",
+            "nameLocation": "1164:8:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1157:64:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.BatchReturn",
+            "documentation": {
+              "id": 4522,
+              "nodeType": "StructuredDocumentation",
+              "src": "1227:133:13",
+              "text": "@param success_count total successes in batch\n @param fail_codes list of failures code and index for each failure in batch"
+            },
+            "id": 4529,
+            "members": [
+              {
+                "constant": false,
+                "id": 4524,
+                "mutability": "mutable",
+                "name": "success_count",
+                "nameLocation": "1401:13:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4529,
+                "src": "1394:20:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 4523,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1394:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4528,
+                "mutability": "mutable",
+                "name": "fail_codes",
+                "nameLocation": "1435:10:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4529,
+                "src": "1424:21:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_FailCode_$4521_storage_$dyn_storage_ptr",
+                  "typeString": "struct CommonTypes.FailCode[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4526,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 4525,
+                      "name": "FailCode",
+                      "nameLocations": [
+                        "1424:8:13"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4521,
+                      "src": "1424:8:13"
+                    },
+                    "referencedDeclaration": 4521,
+                    "src": "1424:8:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_FailCode_$4521_storage_ptr",
+                      "typeString": "struct CommonTypes.FailCode"
+                    }
+                  },
+                  "id": 4527,
+                  "nodeType": "ArrayTypeName",
+                  "src": "1424:10:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_FailCode_$4521_storage_$dyn_storage_ptr",
+                    "typeString": "struct CommonTypes.FailCode[]"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "BatchReturn",
+            "nameLocation": "1372:11:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1365:87:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.UniversalReceiverParams",
+            "documentation": {
+              "id": 4530,
+              "nodeType": "StructuredDocumentation",
+              "src": "1458:86:13",
+              "text": "@param type_ asset type\n @param payload payload corresponding to asset type"
+            },
+            "id": 4535,
+            "members": [
+              {
+                "constant": false,
+                "id": 4532,
+                "mutability": "mutable",
+                "name": "type_",
+                "nameLocation": "1597:5:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "1590:12:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 4531,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1590:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4534,
+                "mutability": "mutable",
+                "name": "payload",
+                "nameLocation": "1618:7:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "1612:13:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 4533,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1612:5:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UniversalReceiverParams",
+            "nameLocation": "1556:23:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1549:83:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.BigInt",
+            "documentation": {
+              "id": 4536,
+              "nodeType": "StructuredDocumentation",
+              "src": "1638:124:13",
+              "text": "@param val contains the actual arbitrary number written as binary\n @param neg indicates if val is negative or not"
+            },
+            "id": 4541,
+            "members": [
+              {
+                "constant": false,
+                "id": 4538,
+                "mutability": "mutable",
+                "name": "val",
+                "nameLocation": "1797:3:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4541,
+                "src": "1791:9:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 4537,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1791:5:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4540,
+                "mutability": "mutable",
+                "name": "neg",
+                "nameLocation": "1815:3:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4541,
+                "src": "1810:8:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 4539,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1810:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "BigInt",
+            "nameLocation": "1774:6:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1767:58:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.FilAddress",
+            "documentation": {
+              "id": 4542,
+              "nodeType": "StructuredDocumentation",
+              "src": "1831:48:13",
+              "text": "@param data filecoin address in bytes format"
+            },
+            "id": 4545,
+            "members": [
+              {
+                "constant": false,
+                "id": 4544,
+                "mutability": "mutable",
+                "name": "data",
+                "nameLocation": "1918:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4545,
+                "src": "1912:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 4543,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1912:5:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "FilAddress",
+            "nameLocation": "1891:10:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1884:45:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.Cid",
+            "documentation": {
+              "id": 4546,
+              "nodeType": "StructuredDocumentation",
+              "src": "1935:35:13",
+              "text": "@param data cid in bytes format"
+            },
+            "id": 4549,
+            "members": [
+              {
+                "constant": false,
+                "id": 4548,
+                "mutability": "mutable",
+                "name": "data",
+                "nameLocation": "2002:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4549,
+                "src": "1996:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 4547,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1996:5:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Cid",
+            "nameLocation": "1982:3:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "1975:38:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.DealLabel",
+            "documentation": {
+              "id": 4550,
+              "nodeType": "StructuredDocumentation",
+              "src": "2019:171:13",
+              "text": "@param data deal proposal label in bytes format (it can be utf8 string or arbitrary bytes string).\n @param isString indicates if the data is string or raw bytes"
+            },
+            "id": 4555,
+            "members": [
+              {
+                "constant": false,
+                "id": 4552,
+                "mutability": "mutable",
+                "name": "data",
+                "nameLocation": "2228:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4555,
+                "src": "2222:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 4551,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2222:5:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4554,
+                "mutability": "mutable",
+                "name": "isString",
+                "nameLocation": "2247:8:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 4555,
+                "src": "2242:13:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 4553,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2242:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "DealLabel",
+            "nameLocation": "2202:9:13",
+            "nodeType": "StructDefinition",
+            "scope": 4560,
+            "src": "2195:67:13",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CommonTypes.FilActorId",
+            "id": 4557,
+            "name": "FilActorId",
+            "nameLocation": "2273:10:13",
+            "nodeType": "UserDefinedValueTypeDefinition",
+            "src": "2268:26:13",
+            "underlyingType": {
+              "id": 4556,
+              "name": "uint64",
+              "nodeType": "ElementaryTypeName",
+              "src": "2287:6:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint64",
+                "typeString": "uint64"
+              }
+            }
+          },
+          {
+            "canonicalName": "CommonTypes.ChainEpoch",
+            "id": 4559,
+            "name": "ChainEpoch",
+            "nameLocation": "2305:10:13",
+            "nodeType": "UserDefinedValueTypeDefinition",
+            "src": "2300:25:13",
+            "underlyingType": {
+              "id": 4558,
+              "name": "int64",
+              "nodeType": "ElementaryTypeName",
+              "src": "2319:5:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_int64",
+                "typeString": "int64"
+              }
+            }
+          }
+        ],
+        "scope": 4561,
+        "src": "984:1343:13",
+        "usedErrors": [],
+        "usedEvents": []
+      }
+    ],
+    "src": "880:1448:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.23+commit.f704f362.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2023-12-09T16:43:05.967Z",
+  "devdoc": {
+    "author": "Zondax AG",
+    "kind": "dev",
+    "methods": {},
+    "title": "Filecoin actors' common types for Solidity.",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

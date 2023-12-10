@@ -1,0 +1,320 @@
+{
+  "contractName": "SPstruct",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SPstruct.sol\":\"SPstruct\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SPstruct.sol\":{\"keccak256\":\"0x11cc659e6e4855a71c3724f653d792e212005096652da604f42c7f8ef5a0577a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a59314a6024fc1212991a97c74a4de1b14378a0de5a5f0060efe3d2eea4d294b\",\"dweb:/ipfs/QmPGgB8tmH41NypRL7CTefdYyvQezW6m2k8fSEKr5TfLao\"]}},\"version\":1}",
+  "bytecode": "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220bc1f9a8d4ad2e6e56a584ebaaa9bc365925b0fa27789b24a73dbd5a29e9ad37864736f6c63430008170033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220bc1f9a8d4ad2e6e56a584ebaaa9bc365925b0fa27789b24a73dbd5a29e9ad37864736f6c63430008170033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "60:314:24:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "60:314:24:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\nlibrary SPstruct {\r\n        enum Status{requested,approved,notApproved}\r\n        struct StorageProvider {\r\n        bool isRegistered;\r\n        address ethAddress;\r\n        uint64 actorid;\r\n        uint256 currentLoan;\r\n        uint64 reputation_score;\r\n        uint256 collateral;\r\n        Status status;\r\n    }\r\n}",
+  "sourcePath": "D:\\Dev\\0Ethindia\\truffle\\contracts\\SPstruct.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/SPstruct.sol",
+    "exportedSymbols": {
+      "SPstruct": [
+        9940
+      ]
+    },
+    "id": 9941,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 9919,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:24"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "SPstruct",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 9940,
+        "linearizedBaseContracts": [
+          9940
+        ],
+        "name": "SPstruct",
+        "nameLocation": "68:8:24",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "SPstruct.Status",
+            "id": 9923,
+            "members": [
+              {
+                "id": 9920,
+                "name": "requested",
+                "nameLocation": "100:9:24",
+                "nodeType": "EnumValue",
+                "src": "100:9:24"
+              },
+              {
+                "id": 9921,
+                "name": "approved",
+                "nameLocation": "110:8:24",
+                "nodeType": "EnumValue",
+                "src": "110:8:24"
+              },
+              {
+                "id": 9922,
+                "name": "notApproved",
+                "nameLocation": "119:11:24",
+                "nodeType": "EnumValue",
+                "src": "119:11:24"
+              }
+            ],
+            "name": "Status",
+            "nameLocation": "93:6:24",
+            "nodeType": "EnumDefinition",
+            "src": "88:43:24"
+          },
+          {
+            "canonicalName": "SPstruct.StorageProvider",
+            "id": 9939,
+            "members": [
+              {
+                "constant": false,
+                "id": 9925,
+                "mutability": "mutable",
+                "name": "isRegistered",
+                "nameLocation": "180:12:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "175:17:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 9924,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "175:4:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9927,
+                "mutability": "mutable",
+                "name": "ethAddress",
+                "nameLocation": "211:10:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "203:18:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 9926,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "203:7:24",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9929,
+                "mutability": "mutable",
+                "name": "actorid",
+                "nameLocation": "239:7:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "232:14:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint64",
+                  "typeString": "uint64"
+                },
+                "typeName": {
+                  "id": 9928,
+                  "name": "uint64",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "232:6:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint64",
+                    "typeString": "uint64"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9931,
+                "mutability": "mutable",
+                "name": "currentLoan",
+                "nameLocation": "265:11:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "257:19:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 9930,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "257:7:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9933,
+                "mutability": "mutable",
+                "name": "reputation_score",
+                "nameLocation": "294:16:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "287:23:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint64",
+                  "typeString": "uint64"
+                },
+                "typeName": {
+                  "id": 9932,
+                  "name": "uint64",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "287:6:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint64",
+                    "typeString": "uint64"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9935,
+                "mutability": "mutable",
+                "name": "collateral",
+                "nameLocation": "329:10:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "321:18:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 9934,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "321:7:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 9938,
+                "mutability": "mutable",
+                "name": "status",
+                "nameLocation": "357:6:24",
+                "nodeType": "VariableDeclaration",
+                "scope": 9939,
+                "src": "350:13:24",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_Status_$9923",
+                  "typeString": "enum SPstruct.Status"
+                },
+                "typeName": {
+                  "id": 9937,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 9936,
+                    "name": "Status",
+                    "nameLocations": [
+                      "350:6:24"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 9923,
+                    "src": "350:6:24"
+                  },
+                  "referencedDeclaration": 9923,
+                  "src": "350:6:24",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_Status_$9923",
+                    "typeString": "enum SPstruct.Status"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "StorageProvider",
+            "nameLocation": "148:15:24",
+            "nodeType": "StructDefinition",
+            "scope": 9940,
+            "src": "141:230:24",
+            "visibility": "public"
+          }
+        ],
+        "scope": 9941,
+        "src": "60:314:24",
+        "usedErrors": [],
+        "usedEvents": []
+      }
+    ],
+    "src": "33:341:24"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.23+commit.f704f362.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2023-12-09T16:43:06.446Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

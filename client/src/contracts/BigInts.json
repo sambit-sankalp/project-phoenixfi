@@ -1,0 +1,3021 @@
+{
+  "contractName": "BigInts",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "NegativeValueNotAllowed",
+      "type": "error"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"NegativeValueNotAllowed\",\"type\":\"error\"}],\"devdoc\":{\"author\":\"Zondax AG\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"This library is a set a functions that allows to handle filecoin addresses conversions and validations\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"@zondax/filecoin-solidity/contracts/v0.8/utils/BigInts.sol\":\"BigInts\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol\":{\"keccak256\":\"0x1819b8e82cf53f0fadc446d064a380979888b97a0004f1e70c9fa1a6f4f13ed9\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://f7346f62e3317f519791256e9ecd70c44b3ed48404d8a15aa28b3490b11adabb\",\"dweb:/ipfs/QmNQLSdzyHLDN9a76XANJzkGVVdyYwYzZSRRiwv6CqwZRr\"]},\"@zondax/filecoin-solidity/contracts/v0.8/utils/BigInts.sol\":{\"keccak256\":\"0x1dff7b0421b352b8430b829065aa816e07cbb8efef76d930a6dba4cf16039a42\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://7580c6fa17a3f06a819c3ec0a925dc6edcd972407aa1dd99c601f4ed068dca37\",\"dweb:/ipfs/QmfFPp3KHPhbDUcnp4xVDcQ3VcgRGLncBQZuoLZH7TmwDR\"]},\"@zondax/filecoin-solidity/contracts/v0.8/utils/Misc.sol\":{\"keccak256\":\"0x97b02c3ab9cb11169b0b1a143b513017c6bf0f2cba2fc4f81a77345b5dfe96b4\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://1b116a3f7af53a2b35316405af74e296550dcfe04798b6c3954e2becda1027c1\",\"dweb:/ipfs/QmPia4SFULn4EXcE8fiMBcKtf8TX7YfbJRZxywu31e6uQw\"]},\"@zondax/solidity-bignumber/src/BigNumbers.sol\":{\"keccak256\":\"0x49357d937485301e45a4ef7343fd348c77093025cfcd5e61545f55288a932b62\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df6d2d61407150a768713b7375a14cd183ae524a96899c675290808362b3dbf\",\"dweb:/ipfs/QmT1mMBLYVzTRf7DVM7GpYyyogKrsUUtHu9itBgh4z9RZm\"]}},\"version\":1}",
+  "bytecode": "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220ff23767afadcf94a689bdd5398a4aedeb1a48c2e44611edfb7d655e8c7cc85f864736f6c63430008170033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220ff23767afadcf94a689bdd5398a4aedeb1a48c2e44611edfb7d655e8c7cc85f864736f6c63430008170033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "1161:2455:16:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "1161:2455:16:-:0;;;;;;;;",
+  "source": "/*******************************************************************************\n *   (c) 2022 Zondax AG\n *\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n ********************************************************************************/\n// THIS CODE WAS SECURITY REVIEWED BY KUDELSKI SECURITY, BUT NOT FORMALLY AUDITED\n\n// SPDX-License-Identifier: Apache-2.0\npragma solidity ^0.8.17;\n\nimport \"@zondax/solidity-bignumber/src/BigNumbers.sol\";\n\nimport \"../types/CommonTypes.sol\";\nimport \"../utils/Misc.sol\";\n\n/// @notice This library is a set a functions that allows to handle filecoin addresses conversions and validations\n/// @author Zondax AG\nlibrary BigInts {\n    uint256 constant MAX_UINT = (2 ** 256) - 1;\n    uint256 constant MAX_INT = ((2 ** 256) / 2) - 1;\n\n    error NegativeValueNotAllowed();\n\n    /// @notice allow to get a BigInt from a uint256 value\n    /// @param value uint256 number\n    /// @return new BigInt\n    function fromUint256(uint256 value) internal view returns (CommonTypes.BigInt memory) {\n        BigNumber memory bigNum = BigNumbers.init(value, false);\n        return CommonTypes.BigInt(bigNum.val, bigNum.neg);\n    }\n\n    /// @notice allow to get a BigInt from a int256 value\n    /// @param value int256 number\n    /// @return new BigInt\n    function fromInt256(int256 value) internal view returns (CommonTypes.BigInt memory) {\n        uint256 valueAbs = Misc.abs(value);\n        BigNumber memory bigNum = BigNumbers.init(valueAbs, value < 0);\n        return CommonTypes.BigInt(bigNum.val, bigNum.neg);\n    }\n\n    /// @notice allow to get a uint256 from a BigInt value.\n    /// @notice If the value is negative, it will generate an error.\n    /// @param value BigInt number\n    /// @return a uint256 value and flog that indicates whether it was possible to convert or not (the value overflows uint256 type)\n    function toUint256(CommonTypes.BigInt memory value) internal view returns (uint256, bool) {\n        if (value.neg) {\n            revert NegativeValueNotAllowed();\n        }\n\n        BigNumber memory max = BigNumbers.init(MAX_UINT, false);\n        BigNumber memory bigNumValue = BigNumbers.init(value.val, value.neg);\n        if (BigNumbers.gt(bigNumValue, max)) {\n            return (0, true);\n        }\n\n        return (uint256(bytes32(bigNumValue.val)), false);\n    }\n\n    /// @notice allow to get a int256 from a BigInt value.\n    /// @notice If the value is grater than what a int256 can store, it will generate an error.\n    /// @param value BigInt number\n    /// @return a int256 value and flog that indicates whether it was possible to convert or not (the value overflows int256 type)\n    function toInt256(CommonTypes.BigInt memory value) internal view returns (int256, bool) {\n        BigNumber memory max = BigNumbers.init(MAX_INT, false);\n        BigNumber memory bigNumValue = BigNumbers.init(value.val, false);\n        if (BigNumbers.gt(bigNumValue, max)) {\n            return (0, true);\n        }\n\n        int256 parsedValue = int256(uint256(bytes32(bigNumValue.val)));\n        return (value.neg ? -1 * parsedValue : parsedValue, false);\n    }\n}\n",
+  "sourcePath": "@zondax\\filecoin-solidity\\contracts\\v0.8\\utils\\BigInts.sol",
+  "ast": {
+    "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/utils/BigInts.sol",
+    "exportedSymbols": {
+      "BigInts": [
+        5400
+      ],
+      "BigNumber": [
+        7101
+      ],
+      "BigNumbers": [
+        9089
+      ],
+      "CommonTypes": [
+        4560
+      ],
+      "Misc": [
+        7092
+      ]
+    },
+    "id": 5401,
+    "license": "Apache-2.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5183,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "877:24:16"
+      },
+      {
+        "absolutePath": "@zondax/solidity-bignumber/src/BigNumbers.sol",
+        "file": "@zondax/solidity-bignumber/src/BigNumbers.sol",
+        "id": 5184,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5401,
+        "sourceUnit": 9090,
+        "src": "903:55:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol",
+        "file": "../types/CommonTypes.sol",
+        "id": 5185,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5401,
+        "sourceUnit": 4561,
+        "src": "960:34:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@zondax/filecoin-solidity/contracts/v0.8/utils/Misc.sol",
+        "file": "../utils/Misc.sol",
+        "id": 5186,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5401,
+        "sourceUnit": 7093,
+        "src": "995:27:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "BigInts",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": {
+          "id": 5187,
+          "nodeType": "StructuredDocumentation",
+          "src": "1024:137:16",
+          "text": "@notice This library is a set a functions that allows to handle filecoin addresses conversions and validations\n @author Zondax AG"
+        },
+        "fullyImplemented": true,
+        "id": 5400,
+        "linearizedBaseContracts": [
+          5400
+        ],
+        "name": "BigInts",
+        "nameLocation": "1169:7:16",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 5195,
+            "mutability": "constant",
+            "name": "MAX_UINT",
+            "nameLocation": "1200:8:16",
+            "nodeType": "VariableDeclaration",
+            "scope": 5400,
+            "src": "1183:42:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5188,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1183:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "commonType": {
+                "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
+                "typeString": "int_const 1157...(70 digits omitted)...9935"
+              },
+              "id": 5194,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "components": [
+                  {
+                    "commonType": {
+                      "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                      "typeString": "int_const 1157...(70 digits omitted)...9936"
+                    },
+                    "id": 5191,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "hexValue": "32",
+                      "id": 5189,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1212:1:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_2_by_1",
+                        "typeString": "int_const 2"
+                      },
+                      "value": "2"
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "**",
+                    "rightExpression": {
+                      "hexValue": "323536",
+                      "id": 5190,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1217:3:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_256_by_1",
+                        "typeString": "int_const 256"
+                      },
+                      "value": "256"
+                    },
+                    "src": "1212:8:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                      "typeString": "int_const 1157...(70 digits omitted)...9936"
+                    }
+                  }
+                ],
+                "id": 5192,
+                "isConstant": false,
+                "isInlineArray": false,
+                "isLValue": false,
+                "isPure": true,
+                "lValueRequested": false,
+                "nodeType": "TupleExpression",
+                "src": "1211:10:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                  "typeString": "int_const 1157...(70 digits omitted)...9936"
+                }
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "-",
+              "rightExpression": {
+                "hexValue": "31",
+                "id": 5193,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "1224:1:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_1_by_1",
+                  "typeString": "int_const 1"
+                },
+                "value": "1"
+              },
+              "src": "1211:14:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
+                "typeString": "int_const 1157...(70 digits omitted)...9935"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 5206,
+            "mutability": "constant",
+            "name": "MAX_INT",
+            "nameLocation": "1248:7:16",
+            "nodeType": "VariableDeclaration",
+            "scope": 5400,
+            "src": "1231:47:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5196,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1231:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "commonType": {
+                "typeIdentifier": "t_rational_57896044618658097711785492504343953926634992332820282019728792003956564819967_by_1",
+                "typeString": "int_const 5789...(69 digits omitted)...9967"
+              },
+              "id": 5205,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "components": [
+                  {
+                    "commonType": {
+                      "typeIdentifier": "t_rational_57896044618658097711785492504343953926634992332820282019728792003956564819968_by_1",
+                      "typeString": "int_const 5789...(69 digits omitted)...9968"
+                    },
+                    "id": 5202,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "components": [
+                        {
+                          "commonType": {
+                            "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                            "typeString": "int_const 1157...(70 digits omitted)...9936"
+                          },
+                          "id": 5199,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "hexValue": "32",
+                            "id": 5197,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1260:1:16",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_2_by_1",
+                              "typeString": "int_const 2"
+                            },
+                            "value": "2"
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "**",
+                          "rightExpression": {
+                            "hexValue": "323536",
+                            "id": 5198,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1265:3:16",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_256_by_1",
+                              "typeString": "int_const 256"
+                            },
+                            "value": "256"
+                          },
+                          "src": "1260:8:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                            "typeString": "int_const 1157...(70 digits omitted)...9936"
+                          }
+                        }
+                      ],
+                      "id": 5200,
+                      "isConstant": false,
+                      "isInlineArray": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "TupleExpression",
+                      "src": "1259:10:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
+                        "typeString": "int_const 1157...(70 digits omitted)...9936"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "/",
+                    "rightExpression": {
+                      "hexValue": "32",
+                      "id": 5201,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1272:1:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_2_by_1",
+                        "typeString": "int_const 2"
+                      },
+                      "value": "2"
+                    },
+                    "src": "1259:14:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_57896044618658097711785492504343953926634992332820282019728792003956564819968_by_1",
+                      "typeString": "int_const 5789...(69 digits omitted)...9968"
+                    }
+                  }
+                ],
+                "id": 5203,
+                "isConstant": false,
+                "isInlineArray": false,
+                "isLValue": false,
+                "isPure": true,
+                "lValueRequested": false,
+                "nodeType": "TupleExpression",
+                "src": "1258:16:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_57896044618658097711785492504343953926634992332820282019728792003956564819968_by_1",
+                  "typeString": "int_const 5789...(69 digits omitted)...9968"
+                }
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "-",
+              "rightExpression": {
+                "hexValue": "31",
+                "id": 5204,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "1277:1:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_1_by_1",
+                  "typeString": "int_const 1"
+                },
+                "value": "1"
+              },
+              "src": "1258:20:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_57896044618658097711785492504343953926634992332820282019728792003956564819967_by_1",
+                "typeString": "int_const 5789...(69 digits omitted)...9967"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "errorSelector": "83041cea",
+            "id": 5208,
+            "name": "NegativeValueNotAllowed",
+            "nameLocation": "1291:23:16",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 5207,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1314:2:16"
+            },
+            "src": "1285:32:16"
+          },
+          {
+            "body": {
+              "id": 5234,
+              "nodeType": "Block",
+              "src": "1531:131:16",
+              "statements": [
+                {
+                  "assignments": [
+                    5219
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5219,
+                      "mutability": "mutable",
+                      "name": "bigNum",
+                      "nameLocation": "1558:6:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5234,
+                      "src": "1541:23:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5218,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5217,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "1541:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "1541:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "1541:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5225,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5222,
+                        "name": "value",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5211,
+                        "src": "1583:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5223,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1590:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5220,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "1567:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5221,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1578:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7225,
+                      "src": "1567:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (uint256,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5224,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1567:29:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1541:55:16"
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "expression": {
+                          "id": 5228,
+                          "name": "bigNum",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5219,
+                          "src": "1632:6:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                            "typeString": "struct BigNumber memory"
+                          }
+                        },
+                        "id": 5229,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "1639:3:16",
+                        "memberName": "val",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 7096,
+                        "src": "1632:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      },
+                      {
+                        "expression": {
+                          "id": 5230,
+                          "name": "bigNum",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5219,
+                          "src": "1644:6:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                            "typeString": "struct BigNumber memory"
+                          }
+                        },
+                        "id": 5231,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "1651:3:16",
+                        "memberName": "neg",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 7098,
+                        "src": "1644:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5226,
+                        "name": "CommonTypes",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4560,
+                        "src": "1613:11:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_CommonTypes_$4560_$",
+                          "typeString": "type(library CommonTypes)"
+                        }
+                      },
+                      "id": 5227,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1625:6:16",
+                      "memberName": "BigInt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4541,
+                      "src": "1613:18:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_struct$_BigInt_$4541_storage_ptr_$",
+                        "typeString": "type(struct CommonTypes.BigInt storage pointer)"
+                      }
+                    },
+                    "id": 5232,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "structConstructorCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1613:42:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                      "typeString": "struct CommonTypes.BigInt memory"
+                    }
+                  },
+                  "functionReturnParameters": 5216,
+                  "id": 5233,
+                  "nodeType": "Return",
+                  "src": "1606:49:16"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5209,
+              "nodeType": "StructuredDocumentation",
+              "src": "1323:117:16",
+              "text": "@notice allow to get a BigInt from a uint256 value\n @param value uint256 number\n @return new BigInt"
+            },
+            "id": 5235,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fromUint256",
+            "nameLocation": "1454:11:16",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5212,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5211,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "1474:5:16",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5235,
+                  "src": "1466:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5210,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1466:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1465:15:16"
+            },
+            "returnParameters": {
+              "id": 5216,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5215,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5235,
+                  "src": "1504:25:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  },
+                  "typeName": {
+                    "id": 5214,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 5213,
+                      "name": "CommonTypes.BigInt",
+                      "nameLocations": [
+                        "1504:11:16",
+                        "1516:6:16"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4541,
+                      "src": "1504:18:16"
+                    },
+                    "referencedDeclaration": 4541,
+                    "src": "1504:18:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                      "typeString": "struct CommonTypes.BigInt"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1503:27:16"
+            },
+            "scope": 5400,
+            "src": "1445:217:16",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 5270,
+              "nodeType": "Block",
+              "src": "1872:182:16",
+              "statements": [
+                {
+                  "assignments": [
+                    5245
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5245,
+                      "mutability": "mutable",
+                      "name": "valueAbs",
+                      "nameLocation": "1890:8:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5270,
+                      "src": "1882:16:16",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 5244,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1882:7:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5250,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5248,
+                        "name": "value",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5238,
+                        "src": "1910:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5246,
+                        "name": "Misc",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 7092,
+                        "src": "1901:4:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_Misc_$7092_$",
+                          "typeString": "type(library Misc)"
+                        }
+                      },
+                      "id": 5247,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1906:3:16",
+                      "memberName": "abs",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 6924,
+                      "src": "1901:8:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_int256_$returns$_t_uint256_$",
+                        "typeString": "function (int256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 5249,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1901:15:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1882:34:16"
+                },
+                {
+                  "assignments": [
+                    5253
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5253,
+                      "mutability": "mutable",
+                      "name": "bigNum",
+                      "nameLocation": "1943:6:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5270,
+                      "src": "1926:23:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5252,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5251,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "1926:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "1926:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "1926:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5261,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5256,
+                        "name": "valueAbs",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5245,
+                        "src": "1968:8:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "commonType": {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        },
+                        "id": 5259,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "id": 5257,
+                          "name": "value",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5238,
+                          "src": "1978:5:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_int256",
+                            "typeString": "int256"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "<",
+                        "rightExpression": {
+                          "hexValue": "30",
+                          "id": 5258,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1986:1:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "src": "1978:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5254,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "1952:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5255,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1963:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7225,
+                      "src": "1952:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (uint256,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5260,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1952:36:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1926:62:16"
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "expression": {
+                          "id": 5264,
+                          "name": "bigNum",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5253,
+                          "src": "2024:6:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                            "typeString": "struct BigNumber memory"
+                          }
+                        },
+                        "id": 5265,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "2031:3:16",
+                        "memberName": "val",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 7096,
+                        "src": "2024:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      },
+                      {
+                        "expression": {
+                          "id": 5266,
+                          "name": "bigNum",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5253,
+                          "src": "2036:6:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                            "typeString": "struct BigNumber memory"
+                          }
+                        },
+                        "id": 5267,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "2043:3:16",
+                        "memberName": "neg",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 7098,
+                        "src": "2036:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5262,
+                        "name": "CommonTypes",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4560,
+                        "src": "2005:11:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_CommonTypes_$4560_$",
+                          "typeString": "type(library CommonTypes)"
+                        }
+                      },
+                      "id": 5263,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "2017:6:16",
+                      "memberName": "BigInt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4541,
+                      "src": "2005:18:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_struct$_BigInt_$4541_storage_ptr_$",
+                        "typeString": "type(struct CommonTypes.BigInt storage pointer)"
+                      }
+                    },
+                    "id": 5268,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "structConstructorCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2005:42:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                      "typeString": "struct CommonTypes.BigInt memory"
+                    }
+                  },
+                  "functionReturnParameters": 5243,
+                  "id": 5269,
+                  "nodeType": "Return",
+                  "src": "1998:49:16"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5236,
+              "nodeType": "StructuredDocumentation",
+              "src": "1668:115:16",
+              "text": "@notice allow to get a BigInt from a int256 value\n @param value int256 number\n @return new BigInt"
+            },
+            "id": 5271,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fromInt256",
+            "nameLocation": "1797:10:16",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5239,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5238,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "1815:5:16",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5271,
+                  "src": "1808:12:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 5237,
+                    "name": "int256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1808:6:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1807:14:16"
+            },
+            "returnParameters": {
+              "id": 5243,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5242,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5271,
+                  "src": "1845:25:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  },
+                  "typeName": {
+                    "id": 5241,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 5240,
+                      "name": "CommonTypes.BigInt",
+                      "nameLocations": [
+                        "1845:11:16",
+                        "1857:6:16"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4541,
+                      "src": "1845:18:16"
+                    },
+                    "referencedDeclaration": 4541,
+                    "src": "1845:18:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                      "typeString": "struct CommonTypes.BigInt"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1844:27:16"
+            },
+            "scope": 5400,
+            "src": "1788:266:16",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 5331,
+              "nodeType": "Block",
+              "src": "2447:379:16",
+              "statements": [
+                {
+                  "condition": {
+                    "expression": {
+                      "id": 5282,
+                      "name": "value",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 5275,
+                      "src": "2461:5:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                        "typeString": "struct CommonTypes.BigInt memory"
+                      }
+                    },
+                    "id": 5283,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberLocation": "2467:3:16",
+                    "memberName": "neg",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": 4540,
+                    "src": "2461:9:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 5288,
+                  "nodeType": "IfStatement",
+                  "src": "2457:72:16",
+                  "trueBody": {
+                    "id": 5287,
+                    "nodeType": "Block",
+                    "src": "2472:57:16",
+                    "statements": [
+                      {
+                        "errorCall": {
+                          "arguments": [],
+                          "expression": {
+                            "argumentTypes": [],
+                            "id": 5284,
+                            "name": "NegativeValueNotAllowed",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5208,
+                            "src": "2493:23:16",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_error_pure$__$returns$__$",
+                              "typeString": "function () pure"
+                            }
+                          },
+                          "id": 5285,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "nameLocations": [],
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "2493:25:16",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 5286,
+                        "nodeType": "RevertStatement",
+                        "src": "2486:32:16"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "assignments": [
+                    5291
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5291,
+                      "mutability": "mutable",
+                      "name": "max",
+                      "nameLocation": "2556:3:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5331,
+                      "src": "2539:20:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5290,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5289,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "2539:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "2539:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "2539:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5297,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5294,
+                        "name": "MAX_UINT",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5195,
+                        "src": "2578:8:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5295,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "2588:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5292,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "2562:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5293,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "2573:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7225,
+                      "src": "2562:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (uint256,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5296,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2562:32:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "2539:55:16"
+                },
+                {
+                  "assignments": [
+                    5300
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5300,
+                      "mutability": "mutable",
+                      "name": "bigNumValue",
+                      "nameLocation": "2621:11:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5331,
+                      "src": "2604:28:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5299,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5298,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "2604:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "2604:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "2604:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5308,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "expression": {
+                          "id": 5303,
+                          "name": "value",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5275,
+                          "src": "2651:5:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                            "typeString": "struct CommonTypes.BigInt memory"
+                          }
+                        },
+                        "id": 5304,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "2657:3:16",
+                        "memberName": "val",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4538,
+                        "src": "2651:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      },
+                      {
+                        "expression": {
+                          "id": 5305,
+                          "name": "value",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5275,
+                          "src": "2662:5:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                            "typeString": "struct CommonTypes.BigInt memory"
+                          }
+                        },
+                        "id": 5306,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "2668:3:16",
+                        "memberName": "neg",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4540,
+                        "src": "2662:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5301,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "2635:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5302,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "2646:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7204,
+                      "src": "2635:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_bytes_memory_ptr_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (bytes memory,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5307,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2635:37:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "2604:68:16"
+                },
+                {
+                  "condition": {
+                    "arguments": [
+                      {
+                        "id": 5311,
+                        "name": "bigNumValue",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5300,
+                        "src": "2700:11:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      },
+                      {
+                        "id": 5312,
+                        "name": "max",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5291,
+                        "src": "2713:3:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        },
+                        {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5309,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "2686:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5310,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "2697:2:16",
+                      "memberName": "gt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 8390,
+                      "src": "2686:13:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_BigNumber_$7101_memory_ptr_$_t_struct$_BigNumber_$7101_memory_ptr_$returns$_t_bool_$",
+                        "typeString": "function (struct BigNumber memory,struct BigNumber memory) pure returns (bool)"
+                      }
+                    },
+                    "id": 5313,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2686:31:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 5319,
+                  "nodeType": "IfStatement",
+                  "src": "2682:78:16",
+                  "trueBody": {
+                    "id": 5318,
+                    "nodeType": "Block",
+                    "src": "2719:41:16",
+                    "statements": [
+                      {
+                        "expression": {
+                          "components": [
+                            {
+                              "hexValue": "30",
+                              "id": 5314,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "2741:1:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            },
+                            {
+                              "hexValue": "74727565",
+                              "id": 5315,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "2744:4:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "true"
+                            }
+                          ],
+                          "id": 5316,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "2740:9:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_rational_0_by_1_$_t_bool_$",
+                            "typeString": "tuple(int_const 0,bool)"
+                          }
+                        },
+                        "functionReturnParameters": 5281,
+                        "id": 5317,
+                        "nodeType": "Return",
+                        "src": "2733:16:16"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "expression": {
+                    "components": [
+                      {
+                        "arguments": [
+                          {
+                            "arguments": [
+                              {
+                                "expression": {
+                                  "id": 5324,
+                                  "name": "bigNumValue",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 5300,
+                                  "src": "2794:11:16",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                                    "typeString": "struct BigNumber memory"
+                                  }
+                                },
+                                "id": 5325,
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "memberLocation": "2806:3:16",
+                                "memberName": "val",
+                                "nodeType": "MemberAccess",
+                                "referencedDeclaration": 7096,
+                                "src": "2794:15:16",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_bytes_memory_ptr",
+                                  "typeString": "bytes memory"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_bytes_memory_ptr",
+                                  "typeString": "bytes memory"
+                                }
+                              ],
+                              "id": 5323,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "nodeType": "ElementaryTypeNameExpression",
+                              "src": "2786:7:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_bytes32_$",
+                                "typeString": "type(bytes32)"
+                              },
+                              "typeName": {
+                                "id": 5322,
+                                "name": "bytes32",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "2786:7:16",
+                                "typeDescriptions": {}
+                              }
+                            },
+                            "id": 5326,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "2786:24:16",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          ],
+                          "id": 5321,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "ElementaryTypeNameExpression",
+                          "src": "2778:7:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_uint256_$",
+                            "typeString": "type(uint256)"
+                          },
+                          "typeName": {
+                            "id": 5320,
+                            "name": "uint256",
+                            "nodeType": "ElementaryTypeName",
+                            "src": "2778:7:16",
+                            "typeDescriptions": {}
+                          }
+                        },
+                        "id": 5327,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2778:33:16",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5328,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "2813:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "id": 5329,
+                    "isConstant": false,
+                    "isInlineArray": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "TupleExpression",
+                    "src": "2777:42:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$_t_uint256_$_t_bool_$",
+                      "typeString": "tuple(uint256,bool)"
+                    }
+                  },
+                  "functionReturnParameters": 5281,
+                  "id": 5330,
+                  "nodeType": "Return",
+                  "src": "2770:49:16"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5272,
+              "nodeType": "StructuredDocumentation",
+              "src": "2060:292:16",
+              "text": "@notice allow to get a uint256 from a BigInt value.\n @notice If the value is negative, it will generate an error.\n @param value BigInt number\n @return a uint256 value and flog that indicates whether it was possible to convert or not (the value overflows uint256 type)"
+            },
+            "id": 5332,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "toUint256",
+            "nameLocation": "2366:9:16",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5276,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5275,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "2402:5:16",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5332,
+                  "src": "2376:31:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  },
+                  "typeName": {
+                    "id": 5274,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 5273,
+                      "name": "CommonTypes.BigInt",
+                      "nameLocations": [
+                        "2376:11:16",
+                        "2388:6:16"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4541,
+                      "src": "2376:18:16"
+                    },
+                    "referencedDeclaration": 4541,
+                    "src": "2376:18:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                      "typeString": "struct CommonTypes.BigInt"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2375:33:16"
+            },
+            "returnParameters": {
+              "id": 5281,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5278,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5332,
+                  "src": "2432:7:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5277,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2432:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5280,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5332,
+                  "src": "2441:4:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5279,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2441:4:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2431:15:16"
+            },
+            "scope": 5400,
+            "src": "2357:469:16",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 5398,
+              "nodeType": "Block",
+              "src": "3241:373:16",
+              "statements": [
+                {
+                  "assignments": [
+                    5345
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5345,
+                      "mutability": "mutable",
+                      "name": "max",
+                      "nameLocation": "3268:3:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5398,
+                      "src": "3251:20:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5344,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5343,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "3251:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "3251:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "3251:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5351,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5348,
+                        "name": "MAX_INT",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5206,
+                        "src": "3290:7:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5349,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "3299:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5346,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "3274:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5347,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "3285:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7225,
+                      "src": "3274:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (uint256,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5350,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "3274:31:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "3251:54:16"
+                },
+                {
+                  "assignments": [
+                    5354
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5354,
+                      "mutability": "mutable",
+                      "name": "bigNumValue",
+                      "nameLocation": "3332:11:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5398,
+                      "src": "3315:28:16",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                        "typeString": "struct BigNumber"
+                      },
+                      "typeName": {
+                        "id": 5353,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 5352,
+                          "name": "BigNumber",
+                          "nameLocations": [
+                            "3315:9:16"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 7101,
+                          "src": "3315:9:16"
+                        },
+                        "referencedDeclaration": 7101,
+                        "src": "3315:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_storage_ptr",
+                          "typeString": "struct BigNumber"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5361,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "expression": {
+                          "id": 5357,
+                          "name": "value",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5336,
+                          "src": "3362:5:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                            "typeString": "struct CommonTypes.BigInt memory"
+                          }
+                        },
+                        "id": 5358,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "3368:3:16",
+                        "memberName": "val",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4538,
+                        "src": "3362:9:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5359,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "3373:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        },
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5355,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "3346:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5356,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "3357:4:16",
+                      "memberName": "init",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7204,
+                      "src": "3346:15:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_bytes_memory_ptr_$_t_bool_$returns$_t_struct$_BigNumber_$7101_memory_ptr_$",
+                        "typeString": "function (bytes memory,bool) view returns (struct BigNumber memory)"
+                      }
+                    },
+                    "id": 5360,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "3346:33:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                      "typeString": "struct BigNumber memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "3315:64:16"
+                },
+                {
+                  "condition": {
+                    "arguments": [
+                      {
+                        "id": 5364,
+                        "name": "bigNumValue",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5354,
+                        "src": "3407:11:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      },
+                      {
+                        "id": 5365,
+                        "name": "max",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5345,
+                        "src": "3420:3:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        },
+                        {
+                          "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                          "typeString": "struct BigNumber memory"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5362,
+                        "name": "BigNumbers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9089,
+                        "src": "3393:10:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_BigNumbers_$9089_$",
+                          "typeString": "type(library BigNumbers)"
+                        }
+                      },
+                      "id": 5363,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "3404:2:16",
+                      "memberName": "gt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 8390,
+                      "src": "3393:13:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_BigNumber_$7101_memory_ptr_$_t_struct$_BigNumber_$7101_memory_ptr_$returns$_t_bool_$",
+                        "typeString": "function (struct BigNumber memory,struct BigNumber memory) pure returns (bool)"
+                      }
+                    },
+                    "id": 5366,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "3393:31:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 5372,
+                  "nodeType": "IfStatement",
+                  "src": "3389:78:16",
+                  "trueBody": {
+                    "id": 5371,
+                    "nodeType": "Block",
+                    "src": "3426:41:16",
+                    "statements": [
+                      {
+                        "expression": {
+                          "components": [
+                            {
+                              "hexValue": "30",
+                              "id": 5367,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "3448:1:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            },
+                            {
+                              "hexValue": "74727565",
+                              "id": 5368,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "3451:4:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "true"
+                            }
+                          ],
+                          "id": 5369,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "3447:9:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_rational_0_by_1_$_t_bool_$",
+                            "typeString": "tuple(int_const 0,bool)"
+                          }
+                        },
+                        "functionReturnParameters": 5342,
+                        "id": 5370,
+                        "nodeType": "Return",
+                        "src": "3440:16:16"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "assignments": [
+                    5374
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5374,
+                      "mutability": "mutable",
+                      "name": "parsedValue",
+                      "nameLocation": "3484:11:16",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5398,
+                      "src": "3477:18:16",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_int256",
+                        "typeString": "int256"
+                      },
+                      "typeName": {
+                        "id": 5373,
+                        "name": "int256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "3477:6:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5386,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "arguments": [
+                          {
+                            "arguments": [
+                              {
+                                "expression": {
+                                  "id": 5381,
+                                  "name": "bigNumValue",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 5354,
+                                  "src": "3521:11:16",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_struct$_BigNumber_$7101_memory_ptr",
+                                    "typeString": "struct BigNumber memory"
+                                  }
+                                },
+                                "id": 5382,
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "memberLocation": "3533:3:16",
+                                "memberName": "val",
+                                "nodeType": "MemberAccess",
+                                "referencedDeclaration": 7096,
+                                "src": "3521:15:16",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_bytes_memory_ptr",
+                                  "typeString": "bytes memory"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_bytes_memory_ptr",
+                                  "typeString": "bytes memory"
+                                }
+                              ],
+                              "id": 5380,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "nodeType": "ElementaryTypeNameExpression",
+                              "src": "3513:7:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_bytes32_$",
+                                "typeString": "type(bytes32)"
+                              },
+                              "typeName": {
+                                "id": 5379,
+                                "name": "bytes32",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "3513:7:16",
+                                "typeDescriptions": {}
+                              }
+                            },
+                            "id": 5383,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "3513:24:16",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          ],
+                          "id": 5378,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "ElementaryTypeNameExpression",
+                          "src": "3505:7:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_uint256_$",
+                            "typeString": "type(uint256)"
+                          },
+                          "typeName": {
+                            "id": 5377,
+                            "name": "uint256",
+                            "nodeType": "ElementaryTypeName",
+                            "src": "3505:7:16",
+                            "typeDescriptions": {}
+                          }
+                        },
+                        "id": 5384,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "3505:33:16",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 5376,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "3498:6:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_int256_$",
+                        "typeString": "type(int256)"
+                      },
+                      "typeName": {
+                        "id": 5375,
+                        "name": "int256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "3498:6:16",
+                        "typeDescriptions": {}
+                      }
+                    },
+                    "id": 5385,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "3498:41:16",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "3477:62:16"
+                },
+                {
+                  "expression": {
+                    "components": [
+                      {
+                        "condition": {
+                          "expression": {
+                            "id": 5387,
+                            "name": "value",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5336,
+                            "src": "3557:5:16",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                              "typeString": "struct CommonTypes.BigInt memory"
+                            }
+                          },
+                          "id": 5388,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "3563:3:16",
+                          "memberName": "neg",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4540,
+                          "src": "3557:9:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "falseExpression": {
+                          "id": 5393,
+                          "name": "parsedValue",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5374,
+                          "src": "3588:11:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_int256",
+                            "typeString": "int256"
+                          }
+                        },
+                        "id": 5394,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "Conditional",
+                        "src": "3557:42:16",
+                        "trueExpression": {
+                          "commonType": {
+                            "typeIdentifier": "t_int256",
+                            "typeString": "int256"
+                          },
+                          "id": 5392,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "id": 5390,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "UnaryOperation",
+                            "operator": "-",
+                            "prefix": true,
+                            "src": "3569:2:16",
+                            "subExpression": {
+                              "hexValue": "31",
+                              "id": 5389,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "3570:1:16",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_1_by_1",
+                                "typeString": "int_const 1"
+                              },
+                              "value": "1"
+                            },
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_minus_1_by_1",
+                              "typeString": "int_const -1"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "*",
+                          "rightExpression": {
+                            "id": 5391,
+                            "name": "parsedValue",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5374,
+                            "src": "3574:11:16",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_int256",
+                              "typeString": "int256"
+                            }
+                          },
+                          "src": "3569:16:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_int256",
+                            "typeString": "int256"
+                          }
+                        },
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      },
+                      {
+                        "hexValue": "66616c7365",
+                        "id": 5395,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "bool",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "3601:5:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "value": "false"
+                      }
+                    ],
+                    "id": 5396,
+                    "isConstant": false,
+                    "isInlineArray": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "TupleExpression",
+                    "src": "3556:51:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$_t_int256_$_t_bool_$",
+                      "typeString": "tuple(int256,bool)"
+                    }
+                  },
+                  "functionReturnParameters": 5342,
+                  "id": 5397,
+                  "nodeType": "Return",
+                  "src": "3549:58:16"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5333,
+              "nodeType": "StructuredDocumentation",
+              "src": "2832:316:16",
+              "text": "@notice allow to get a int256 from a BigInt value.\n @notice If the value is grater than what a int256 can store, it will generate an error.\n @param value BigInt number\n @return a int256 value and flog that indicates whether it was possible to convert or not (the value overflows int256 type)"
+            },
+            "id": 5399,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "toInt256",
+            "nameLocation": "3162:8:16",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5337,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5336,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "3197:5:16",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5399,
+                  "src": "3171:31:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BigInt_$4541_memory_ptr",
+                    "typeString": "struct CommonTypes.BigInt"
+                  },
+                  "typeName": {
+                    "id": 5335,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 5334,
+                      "name": "CommonTypes.BigInt",
+                      "nameLocations": [
+                        "3171:11:16",
+                        "3183:6:16"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 4541,
+                      "src": "3171:18:16"
+                    },
+                    "referencedDeclaration": 4541,
+                    "src": "3171:18:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BigInt_$4541_storage_ptr",
+                      "typeString": "struct CommonTypes.BigInt"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3170:33:16"
+            },
+            "returnParameters": {
+              "id": 5342,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5339,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5399,
+                  "src": "3227:6:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 5338,
+                    "name": "int256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3227:6:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5341,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5399,
+                  "src": "3235:4:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5340,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3235:4:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3226:14:16"
+            },
+            "scope": 5400,
+            "src": "3153:461:16",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 5401,
+        "src": "1161:2455:16",
+        "usedErrors": [
+          5208
+        ],
+        "usedEvents": []
+      }
+    ],
+    "src": "877:2740:16"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.23+commit.f704f362.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2023-12-09T16:43:06.062Z",
+  "devdoc": {
+    "author": "Zondax AG",
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "This library is a set a functions that allows to handle filecoin addresses conversions and validations",
+    "version": 1
+  }
+}
