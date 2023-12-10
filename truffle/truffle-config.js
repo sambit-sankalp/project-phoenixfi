@@ -42,6 +42,17 @@ module.exports = {
       // timeoutBlocks: 200, 
       skipDryRun: true     
 
+    },
+    scroll:{
+      networkCheckTimeout: 10000,
+      provider: () => new HDWalletProvider(`${key}`,`https://sepolia-rpc.scroll.io`),
+      network_id:  534351,     
+      //gas: 20000000,
+      // gasPrice:100000000000,        
+      confirmations: 1,    
+      // timeoutBlocks: 200, 
+      skipDryRun: true     
+
     }
   },
   compilers: {
@@ -53,6 +64,7 @@ plugins: [
   'truffle-plugin-verify'
 ],
 api_keys: {
+  scrollscan :'55NH7AHMP2BSD2AUTD57S3RVMWQ9G8CR4W',
   etherscan:'VE8G8TQAA495N1M7R32RP5RT46KVCMSMRA',
   polygonscan: 'YARQS2K6QJMV21FTY3Q8MSS6T7DSP8ACHH'
 }
