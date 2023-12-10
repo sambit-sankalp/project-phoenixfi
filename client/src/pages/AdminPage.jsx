@@ -24,7 +24,7 @@ const AdminPage = () => {
   },[_StorageContract,account])
   const handleMinerAddress = (e)=>{
     setMinerAddress(e.target.value);
-  }
+  };
   // const handleLoanAmount = ()=>{
   //   setLoanAmount(e.target.value);
   // }
@@ -56,7 +56,7 @@ const AdminPage = () => {
             <input
               type="text"
               onChange={handleMinerAddress}
-              value = {minerAddress}
+              value={minerAddress}
               id="mineraddress"
               class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
               placeholder="0x721d857...6279A7	"
@@ -90,7 +90,7 @@ const AdminPage = () => {
             <input
               type="text"
               onChange={handlereputation}
-              value = {reputationScore}
+              value={reputationScore}
               id="reputation"
               class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
               placeholder="535.23"
@@ -108,13 +108,16 @@ const AdminPage = () => {
               type="text"
               id="collateral"
               onChange={handlecollateral}
-              value = {collateral}
+              value={collateral}
               class="block w-full rounded-lg border border-secondary-500 bg-transparent p-2.5 text-xl text-white"
               placeholder="997.98"
               required
             />
           </div>
-          <div onClick={handleAdd} className="ml-10 flex cursor-pointer items-center justify-start gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[15px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500">
+          <div
+            onClick={handleAdd}
+            className="ml-10 flex cursor-pointer items-center justify-start gap-3 whitespace-nowrap rounded-lg bg-secondary-500 px-8 py-2 !text-[15px] font-semibold text-black transition-colors duration-300 hover:bg-secondary-500"
+          >
             Add
           </div>
         </form>

@@ -82,7 +82,7 @@ const changeBeneficiary = async(contract,account,minerId,quota)=>{
   if(!contract){
     return false;
   }
-  const res = await contract.methods.changeBeneficiary(minerId,59850,quota,518,400).send({from:account});
+  const res = await contract.methods.changeBeneficiary(minerId,59850,quota,518400).send({from:account});
 
 }
 export {addAdmin,setSPContract,setParams,request,lend,unStake,stake,register,changeBeneficiary}
