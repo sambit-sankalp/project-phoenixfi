@@ -7,7 +7,7 @@ const ContentImageData = [
     title: 'Stake FIL',
     content: 'Select an amount of FIL to stake on Collectif DAO application.',
     align: 'right',
-    image: '/features1.png',
+    image: '/stk.png',
   },
   {
     id: uuid(),
@@ -15,7 +15,7 @@ const ContentImageData = [
     content:
       'Receive clFIL which automatically increases in value from Filecoin mining rewards',
     align: 'left',
-    image: '/features2.png',
+    image: '/loan.png',
   },
   {
     id: uuid(),
@@ -23,7 +23,7 @@ const ContentImageData = [
     content:
       'Help growing Filecoin with storage capacity by allocating FIL to network’s top Storage Providers',
     align: 'right',
-    image: '/features2.png',
+    image: '/onchain reputation cal.png',
   },
 ];
 
